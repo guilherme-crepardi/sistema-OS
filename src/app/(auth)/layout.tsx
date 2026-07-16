@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   Wrench,
+  DollarSign,
 } from "lucide-react";
 
 const menuItems = [
@@ -19,6 +20,7 @@ const menuItems = [
   { href: "/clientes", label: "Clientes", icon: Users },
   { href: "/os", label: "Ordens de Serviço", icon: Settings },
   { href: "/iptv", label: "IPTV", icon: Tv },
+  { href: "/financeiro", label: "Financeiro", icon: DollarSign },
 ];
 
 export default function AuthLayout({

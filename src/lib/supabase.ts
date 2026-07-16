@@ -44,6 +44,7 @@ export interface OrdemServico {
   problema: string | null;
   valor: number;
   status: 'aberta' | 'em_andamento' | 'aguardando_peca' | 'pronta';
+  pago: boolean;
   observacoes: string | null;
   created_at: string;
   updated_at: string;

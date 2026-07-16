@@ -201,17 +201,27 @@ export default function OSPage() {
                         <StatusIcon size={12} />
                         {statusConfig.label}
                       </span>
+                      {os.valor > 0 && (
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${os.pago ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                          {os.pago ? "Pago" : "Não Pago"}
+                        </span>
+                      )}
                     </div>
                     <p className="font-medium text-gray-800">{os.descricao}</p>
                     {os.equipamento && (
                       <p className="text-sm text-blue-600 mt-1">
-                        📱 {os.equipamento}
+                        {os.equipamento}
                       </p>
                     )}
                     <p className="text-sm text-gray-500 mt-1">
                       {os.cliente?.nome || "Cliente não informado"} •{" "}
                       {new Date(os.created_at).toLocaleDateString("pt-BR")}
                     </p>
+                    {os.valor > 0 && (
+                      <p className={`text-sm font-bold mt-1 ${os.pago ? "text-green-600" : "text-red-600"}`}>
+                        R$ {os.valor.toFixed(2).replace(".", ",")}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">

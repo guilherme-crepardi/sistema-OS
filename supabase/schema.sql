@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS ordens_servico (
   valor DECIMAL(10,2) DEFAULT 0,
   status TEXT NOT NULL DEFAULT 'aberta' 
     CHECK (status IN ('aberta', 'em_andamento', 'aguardando_peca', 'pronta')),
+  pago BOOLEAN DEFAULT FALSE,
   observacoes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
