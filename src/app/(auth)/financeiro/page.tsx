@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase, OrdemServico, IptvCliente } from "@/lib/supabase";
+import { supabase, OrdemServico, IptvCliente, Cliente } from "@/lib/supabase";
 import { DollarSign, TrendingUp, Clock, CheckCircle, Calendar, Filter } from "lucide-react";
 
 type Periodo = "diario" | "semanal" | "mensal" | "anual";
