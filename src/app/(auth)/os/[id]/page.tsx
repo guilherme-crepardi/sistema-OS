@@ -119,12 +119,19 @@ export default function DetalheOSPage() {
 
   const handleTogglePago = async () => {
     try {
-      const { error } = await supabase
+      const novoPago = !os?.pago;
+      const { data, error } = await supabase
         .from("ordens_servico")
-        .update({ pago: !os?.pago, updated_at: new Date().toISOString() })
-        .eq("id", id);
-      if (error) throw error;
-      loadOS();
+        .update({ pago: novoPago })
+        .eq("id", id)
+        .select();
+
+      if (error) {
+        console.error("Erro Supabase:", error);
+        alert(`Erro: ${error.message}\n\nExecute no Supabase SQL Editor:\nALTER TABLE ordens_servico ADD COLUMN IF NOT EXISTS pago BOOLEAN DEFAULT FALSE;`);
+        return;
+      }
+      setOs(data?.[0] ? { ...os!, pago: novoPago } : os);
     } catch (error) {
       console.error("Erro ao atualizar pagamento:", error);
       alert("Erro ao atualizar pagamento");

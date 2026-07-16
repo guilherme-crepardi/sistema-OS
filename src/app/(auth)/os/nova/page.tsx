@@ -104,6 +104,7 @@ export default function NovaOSPage() {
         valor: parseFloat(form.valor) || 0,
         observacoes: form.observacoes || null,
         status: form.status,
+        pago: false,
       });
 
       if (error) throw error;
