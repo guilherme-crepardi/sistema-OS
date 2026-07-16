@@ -73,7 +73,11 @@ export default function EditarIPTVClientePage() {
         })
         .eq("id", id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Erro Supabase:", error);
+        alert(`Erro: ${error.message}\n\nSe o erro for coluna "pagou", execute no Supabase SQL Editor:\nALTER TABLE iptv_clientes ADD COLUMN IF NOT EXISTS pagou BOOLEAN DEFAULT FALSE;`);
+        return;
+      }
       router.push("/iptv/clientes");
     } catch (error) {
       console.error("Erro ao atualizar:", error);
