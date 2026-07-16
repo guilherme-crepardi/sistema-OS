@@ -20,7 +20,10 @@ export default function EditarClientePage() {
     rg: "",
     telefone: "",
     email: "",
-    endereco: "",
+    rua: "",
+    numero: "",
+    bairro: "",
+    cep: "",
   });
 
   useEffect(() => {
@@ -38,7 +41,10 @@ export default function EditarClientePage() {
         rg: data.rg || "",
         telefone: data.telefone,
         email: data.email || "",
-        endereco: data.endereco || "",
+        rua: data.rua || "",
+        numero: data.numero || "",
+        bairro: data.bairro || "",
+        cep: data.cep || "",
       });
     } catch (error) {
       console.error("Erro ao carregar cliente:", error);
@@ -62,7 +68,10 @@ export default function EditarClientePage() {
           rg: form.rg || null,
           telefone: form.telefone,
           email: form.email || null,
-          endereco: form.endereco || null,
+          rua: form.rua || null,
+          numero: form.numero || null,
+          bairro: form.bairro || null,
+          cep: form.cep || null,
           updated_at: new Date().toISOString(),
         })
         .eq("id", id);
@@ -189,15 +198,70 @@ export default function EditarClientePage() {
             />
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Endereço
+              CEP
             </label>
             <input
               type="text"
-              value={form.endereco}
-              onChange={(e) => setForm({ ...form, endereco: e.target.value })}
+              value={form.cep}
+              onChange={(e) => {
+                const cep = e.target.value;
+                setForm({ ...form, cep });
+                const cleaned = cep.replace(/\D/g, "");
+                if (cleaned.length === 8) {
+                  fetch(`https://viacep.com.br/ws/${cleaned}/json/`)
+                    .then((r) => r.json())
+                    .then((data) => {
+                      if (!data.erro) {
+                        setForm((prev) => ({ ...prev, rua: data.logradouro || "", bairro: data.bairro || "", cep }));
+                      }
+                    })
+                    .catch(() => {});
+                }
+              }}
               className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              placeholder="00000-000"
+              maxLength={9}
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Rua
+            </label>
+            <input
+              type="text"
+              value={form.rua}
+              onChange={(e) => setForm({ ...form, rua: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 md:col-span-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Número
+              </label>
+              <input
+                type="text"
+                value={form.numero}
+                onChange={(e) => setForm({ ...form, numero: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Bairro
+              </label>
+              <input
+                type="text"
+                value={form.bairro}
+                onChange={(e) => setForm({ ...form, bairro: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              />
+            </div>
+          </div>
             />
           </div>
         </div>
