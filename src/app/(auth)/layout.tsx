@@ -13,6 +13,7 @@ import {
   X,
   Wrench,
   DollarSign,
+  MapPin,
 } from "lucide-react";
 
 const menuItems = [
@@ -20,6 +21,7 @@ const menuItems = [
   { href: "/clientes", label: "Clientes", icon: Users },
   { href: "/os", label: "Ordens de Serviço", icon: Settings },
   { href: "/iptv", label: "IPTV", icon: Tv },
+  { href: "/servicos-externos", label: "Serviços Externos", icon: MapPin },
   { href: "/financeiro", label: "Financeiro", icon: DollarSign },
 ];
 

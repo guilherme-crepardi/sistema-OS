@@ -65,3 +65,18 @@ export interface IptvCliente {
   created_at: string;
   updated_at: string;
 }
+
+export interface ServicoExterno {
+  id: string;
+  cliente_nome: string;
+  telefone: string | null;
+  servico: string;
+  valor: number;
+  pago: boolean;
+  tipo: 'externo' | 'recorrente';
+  recorrencia: 'semanal' | 'quinzenal' | 'mensal' | 'bimestral' | 'trimestral' | 'semestral' | 'anual' | null;
+  data_servico: string;
+  observacoes: string | null;
+  created_at: string;
+  updated_at: string;
+}

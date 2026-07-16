@@ -53,6 +53,24 @@ CREATE TABLE IF NOT EXISTS iptv_clientes (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Tabela de Serviços Externos
+CREATE TABLE IF NOT EXISTS servicos_externos (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  cliente_nome TEXT NOT NULL,
+  telefone TEXT,
+  servico TEXT NOT NULL,
+  valor DECIMAL(10,2) DEFAULT 0,
+  pago BOOLEAN DEFAULT FALSE,
+  tipo TEXT NOT NULL DEFAULT 'externo'
+    CHECK (tipo IN ('externo', 'recorrente')),
+  recorrencia TEXT
+    CHECK (recorrencia IS NULL OR recorrencia IN ('semanal', 'quinzenal', 'mensal', 'bimestral', 'trimestral', 'semestral', 'anual')),
+  data_servico DATE NOT NULL DEFAULT CURRENT_DATE,
+  observacoes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Índices para performance
 CREATE INDEX IF NOT EXISTS idx_os_cliente ON ordens_servico(cliente_id);
 CREATE INDEX IF NOT EXISTS idx_os_status ON ordens_servico(status);

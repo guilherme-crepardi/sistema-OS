@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase, OrdemServico, IptvCliente, Cliente } from "@/lib/supabase";
+import { supabase, OrdemServico, IptvCliente, Cliente, ServicoExterno } from "@/lib/supabase";
 import { DollarSign, TrendingUp, Clock, CheckCircle, Calendar, Filter } from "lucide-react";
 
 type Periodo = "diario" | "semanal" | "mensal" | "anual";
-type Origem = "todos" | "os" | "iptv";
+type Origem = "todos" | "os" | "iptv" | "externos";
 type StatusPagamento = "todos" | "pago" | "nao_pago";
 
 interface Transacao {
   id: string;
-  origem: "OS" | "IPTV";
+  origem: "OS" | "IPTV" | "EXT";
   descricao: string;
   cliente: string;
   valor: number;
@@ -21,6 +21,7 @@ interface Transacao {
 export default function FinanceiroPage() {
   const [ordens, setOrdens] = useState<(OrdemServico & { cliente?: Cliente })[]>([]);
   const [iptvClientes, setIptvClientes] = useState<IptvCliente[]>([]);
+  const [servicosExternos, setServicosExternos] = useState<ServicoExterno[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [periodo, setPeriodo] = useState<Periodo>("mensal");
@@ -33,12 +34,14 @@ export default function FinanceiroPage() {
 
   async function loadData() {
     try {
-      const [osData, iptvData] = await Promise.all([
+      const [osData, iptvData, servicosData] = await Promise.all([
         supabase.from("ordens_servico").select("*, cliente:clientes(*)").order("created_at", { ascending: false }),
         supabase.from("iptv_clientes").select("*").order("created_at", { ascending: false }),
+        supabase.from("servicos_externos").select("*").order("created_at", { ascending: false }),
       ]);
       setOrdens(osData.data || []);
       setIptvClientes(iptvData.data || []);
+      setServicosExternos(servicosData.data || []);
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
     } finally {
@@ -92,6 +95,28 @@ export default function FinanceiroPage() {
       });
     }
 
+    // Filtrar Serviços Externos por período
+    const servicosFiltrados = servicosExternos.filter((s) => {
+      const data = new Date(s.created_at);
+      return isInPeriodo(data, now, periodo);
+    });
+
+    // Adicionar Serviços Externos
+    if (origem === "todos" || origem === "externos") {
+      servicosFiltrados.forEach((s) => {
+        const tipoLabel = s.tipo === "recorrente" ? `Recorrente (${s.recorrencia})` : "Externo";
+        transacoes.push({
+          id: s.id,
+          origem: "EXT",
+          descricao: `${tipoLabel} - ${s.servico}`,
+          cliente: s.cliente_nome,
+          valor: s.valor || 0,
+          pago: s.pago || false,
+          data: s.created_at,
+        });
+      });
+    }
+
     // Filtrar por pagamento
     if (statusPagamento === "pago") {
       return transacoes.filter((t) => t.pago);
@@ -132,6 +157,7 @@ export default function FinanceiroPage() {
   const totalNaoPago = transacoes.filter((t) => !t.pago).reduce((acc, t) => acc + t.valor, 0);
   const totalOS = transacoes.filter((t) => t.origem === "OS").reduce((acc, t) => acc + t.valor, 0);
   const totalIPTV = transacoes.filter((t) => t.origem === "IPTV").reduce((acc, t) => acc + t.valor, 0);
+  const totalExt = transacoes.filter((t) => t.origem === "EXT").reduce((acc, t) => acc + t.valor, 0);
 
   if (loading) {
     return (
@@ -179,6 +205,7 @@ export default function FinanceiroPage() {
               { value: "todos", label: "Todos" },
               { value: "os", label: "OS" },
               { value: "iptv", label: "IPTV" },
+              { value: "externos", label: "Externos" },
             ] as { value: Origem; label: string }[]).map((o) => (
               <button
                 key={o.value}
@@ -218,7 +245,7 @@ export default function FinanceiroPage() {
       </div>
 
       {/* Cards de Resumo */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
         <div className="bg-white rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-[#2563eb] rounded-lg">
@@ -274,6 +301,17 @@ export default function FinanceiroPage() {
             </div>
           </div>
         </div>
+        <div className="bg-white rounded-xl shadow-sm p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-orange-500 rounded-lg">
+              <TrendingUp className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">Externos</p>
+              <p className="text-lg font-bold text-orange-600">R$ {totalExt.toFixed(2).replace(".", ",")}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Tabela de Transações */}
@@ -317,9 +355,9 @@ export default function FinanceiroPage() {
                 <tr key={`${t.origem}-${t.id}`} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 sm:px-6 py-4">
                     <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      t.origem === "OS" ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"
+                      t.origem === "OS" ? "bg-blue-100 text-blue-700" : t.origem === "IPTV" ? "bg-purple-100 text-purple-700" : "bg-orange-100 text-orange-700"
                     }`}>
-                      {t.origem}
+                      {t.origem === "EXT" ? "EXT" : t.origem}
                     </span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
