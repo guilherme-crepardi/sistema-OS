@@ -175,10 +175,10 @@ export default function IPTVClientesPage() {
       <div className="bg-white rounded-xl shadow-sm p-4">
         <div className="flex flex-col gap-4">
           {/* Payment Filter Tabs */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto pb-1">
             <button
               onClick={() => setPaymentFilter("todos")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                 paymentFilter === "todos"
                   ? "bg-[#2563eb] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -188,7 +188,7 @@ export default function IPTVClientesPage() {
             </button>
             <button
               onClick={() => setPaymentFilter("pago")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
                 paymentFilter === "pago"
                   ? "bg-green-600 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -199,7 +199,7 @@ export default function IPTVClientesPage() {
             </button>
             <button
               onClick={() => setPaymentFilter("nao_pago")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
                 paymentFilter === "nao_pago"
                   ? "bg-red-600 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -240,7 +240,7 @@ export default function IPTVClientesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
         {loading ? (
           <div className="flex items-center justify-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2563eb]"></div>

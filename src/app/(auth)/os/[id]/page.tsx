@@ -132,7 +132,7 @@ export default function DetalheOSPage() {
   return (
     <div className="max-w-3xl mx-auto">
       {/* Header - no print */}
-      <div className="flex items-center justify-between mb-6 no-print">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 no-print">
         <div className="flex items-center gap-4">
           <Link
             href="/os"
@@ -147,29 +147,29 @@ export default function DetalheOSPage() {
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {!editing && (
             <>
               <button
                 onClick={handlePrint}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
               >
-                <Printer size={18} />
-                Imprimir
+                <Printer size={16} />
+                <span className="hidden sm:inline">Imprimir</span>
               </button>
               <button
                 onClick={() => setEditing(true)}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition-colors"
+                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition-colors text-sm"
               >
-                <Edit size={18} />
-                Editar
+                <Edit size={16} />
+                <span className="hidden sm:inline">Editar</span>
               </button>
               <button
                 onClick={handleDelete}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
               >
-                <Trash2 size={18} />
-                Excluir
+                <Trash2 size={16} />
+                <span className="hidden sm:inline">Excluir</span>
               </button>
             </>
           )}
@@ -188,17 +188,17 @@ export default function DetalheOSPage() {
                     observacoes: os.observacoes || "",
                   });
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm"
               >
-                <X size={18} />
-                Cancelar
+                <X size={16} />
+                <span className="hidden sm:inline">Cancelar</span>
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition-colors disabled:opacity-50 text-sm"
               >
-                <Save size={18} />
+                <Save size={16} />
                 {saving ? "Salvando..." : "Salvar"}
               </button>
             </>
@@ -229,7 +229,7 @@ export default function DetalheOSPage() {
           {/* Dados do Cliente */}
           <div className="mb-6">
             <h3 className="text-sm font-semibold text-gray-500 mb-2">DADOS DO CLIENTE</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Nome</p>
                 <p className="font-medium">{os.cliente?.nome || "—"}</p>
@@ -288,7 +288,7 @@ export default function DetalheOSPage() {
 
           {/* Assinatura */}
           <div className="pt-8 border-t border-gray-200">
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row justify-between gap-8">
               <div className="text-center">
                 <div className="w-48 border-b border-gray-400 mb-2"></div>
                 <p className="text-sm text-gray-500">Assinatura do Cliente</p>
@@ -414,7 +414,7 @@ export default function DetalheOSPage() {
               />
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100">
               <button
                 onClick={() => {
                   setEditing(false);
