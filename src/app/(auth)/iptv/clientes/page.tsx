@@ -19,8 +19,28 @@ export default function IPTVClientesPage() {
   const [paymentFilter, setPaymentFilter] = useState<"todos" | "pago" | "nao_pago">("todos");
 
   useEffect(() => {
+    resetMonthlyPayments();
     loadClientes();
   }, [statusFilter, paymentFilter]);
+
+  async function resetMonthlyPayments() {
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const lastReset = localStorage.getItem("iptv_last_reset_month");
+
+    if (lastReset === currentMonth) return;
+
+    try {
+      await supabase
+        .from("iptv_clientes")
+        .update({ pagou: false, notificado: false, updated_at: new Date().toISOString() })
+        .eq("pagou", true);
+
+      localStorage.setItem("iptv_last_reset_month", currentMonth);
+    } catch (error) {
+      console.error("Erro ao resetar pagamentos:", error);
+    }
+  }
 
   async function loadClientes() {
     try {
