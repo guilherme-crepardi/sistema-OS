@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, DollarSign, Al
 const STATUS_CONFIG = {
   ativo: { label: "Ativo", color: "bg-green-100 text-green-700", icon: CheckCircle },
   vencido: { label: "Vencido", color: "bg-red-100 text-red-700", icon: XCircle },
-  cancelado: { label: "Cancelado", color: "bg-gray-100 text-gray-700", icon: XCircle },
+  cancelado: { label: "Cancelado", color: "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300", icon: XCircle },
 };
 
 export default function IPTVClientesPage() {
@@ -168,13 +168,13 @@ export default function IPTVClientesPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/iptv"
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+            className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
           >
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Clientes IPTV</h1>
-            <p className="text-gray-500">Gerencie seus clientes de IPTV</p>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Clientes IPTV</h1>
+            <p className="text-gray-500 dark:text-gray-400">Gerencie seus clientes de IPTV</p>
           </div>
         </div>
         <Link
@@ -210,35 +210,35 @@ export default function IPTVClientesPage() {
 
       {/* Stats de Pagamento */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-green-100 rounded-lg">
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Pagos em {mesAtual}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Pagos em {mesAtual}</p>
               <p className="text-2xl font-bold text-green-600">{clientesPagos}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-yellow-100 rounded-lg">
               <Clock className="w-6 h-6 text-yellow-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Pendentes em {mesAtual}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Pendentes em {mesAtual}</p>
               <p className="text-2xl font-bold text-yellow-600">{clientesNaoPagos}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-red-100 rounded-lg">
               <DollarSign className="w-6 h-6 text-red-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">A Receber</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">A Receber</p>
               <p className="text-2xl font-bold text-red-600">R$ {clientes.filter(c => !c.pagou).reduce((acc, c) => acc + c.valor, 0).toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function IPTVClientesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
         <div className="flex flex-col gap-4">
           {/* Payment Filter Tabs */}
           <div className="flex gap-2 overflow-x-auto pb-1">
@@ -255,7 +255,7 @@ export default function IPTVClientesPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                 paymentFilter === "todos"
                   ? "bg-[#2563eb] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Todos
@@ -265,7 +265,7 @@ export default function IPTVClientesPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
                 paymentFilter === "pago"
                   ? "bg-green-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               <CheckCircle size={16} />
@@ -276,7 +276,7 @@ export default function IPTVClientesPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
                 paymentFilter === "nao_pago"
                   ? "bg-yellow-500 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               <Clock size={16} />
@@ -287,7 +287,7 @@ export default function IPTVClientesPage() {
           {/* Search and Status Filter */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
               <input
                 type="text"
                 placeholder="Buscar por nome ou telefone..."
@@ -296,13 +296,13 @@ export default function IPTVClientesPage() {
                   setSearch(e.target.value);
                   loadClientes();
                 }}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
             >
               <option value="">Todos os status</option>
               <option value="ativo">Ativo</option>
@@ -314,7 +314,7 @@ export default function IPTVClientesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-x-auto">
         {loading ? (
           <div className="flex items-center justify-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2563eb]"></div>
@@ -322,29 +322,29 @@ export default function IPTVClientesPage() {
         ) : clientes.length === 0 ? (
           <div className="text-center py-12">
             <Tv className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Nenhum cliente IPTV encontrado</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhum cliente IPTV encontrado</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Cliente
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Pagamento
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Vencimento
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Valor
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Ações
                   </th>
                 </tr>
@@ -356,15 +356,15 @@ export default function IPTVClientesPage() {
                   const isVencido = new Date(cliente.data_vencimento) < new Date();
 
                   return (
-                    <tr key={cliente.id} className="hover:bg-gray-50 transition-colors">
+                    <tr key={cliente.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 bg-[#2563eb] rounded-full flex items-center justify-center text-white font-medium">
                             {cliente.nome.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-800">{cliente.nome}</p>
-                            <p className="text-sm text-gray-500">{cliente.telefone}</p>
+                            <p className="font-medium text-gray-800 dark:text-gray-100">{cliente.nome}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{cliente.telefone}</p>
                           </div>
                         </div>
                       </td>
@@ -388,11 +388,11 @@ export default function IPTVClientesPage() {
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <p className={`text-sm ${isVencido ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                        <p className={`text-sm ${isVencido ? "text-red-600 font-medium" : "text-gray-600 dark:text-gray-400"}`}>
                           {new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}
                         </p>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                         R$ {cliente.valor.toFixed(2).replace(".", ",")}
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -400,7 +400,7 @@ export default function IPTVClientesPage() {
                           {!cliente.pagou && (
                             <button
                               onClick={() => handleMarkAsPaid(cliente.id)}
-                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
+                              className="p-2 text-gray-400 dark:text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
                               title="Marcar como pago"
                             >
                               <CheckCircle size={18} />
@@ -409,7 +409,7 @@ export default function IPTVClientesPage() {
                           {cliente.pagou && (
                             <button
                               onClick={() => handleMarkAsUnpaid(cliente.id)}
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                              className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                               title="Marcar como não pago"
                             >
                               <XCircle size={18} />
@@ -418,7 +418,7 @@ export default function IPTVClientesPage() {
                           {cliente.status === "ativo" && (
                             <button
                               onClick={() => handleCancel(cliente.id)}
-                              className="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-all"
+                              className="p-2 text-gray-400 dark:text-gray-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-all"
                               title="Cancelar"
                             >
                               <Clock size={18} />
@@ -426,13 +426,13 @@ export default function IPTVClientesPage() {
                           )}
                           <Link
                             href={`/iptv/clientes/${cliente.id}`}
-                            className="p-2 text-gray-400 hover:text-[#2563eb] hover:bg-blue-50 rounded-lg transition-all"
+                            className="p-2 text-gray-400 dark:text-gray-500 hover:text-[#2563eb] hover:bg-blue-50 rounded-lg transition-all"
                           >
                             <Edit size={18} />
                           </Link>
                           <button
                             onClick={() => handleDelete(cliente.id, cliente.nome)}
-                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                            className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
                           >
                             <Trash2 size={18} />
                           </button>

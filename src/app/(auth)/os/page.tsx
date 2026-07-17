@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -84,8 +84,8 @@ export default function OSPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Ordens de Serviço</h1>
-          <p className="text-gray-500">Gerencie as ordens de serviço</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Ordens de Serviço</h1>
+          <p className="text-gray-500 dark:text-gray-400">Gerencie as ordens de serviço</p>
         </div>
         <Link
           href="/os/nova"
@@ -97,7 +97,7 @@ export default function OSPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
         <div className="flex flex-col gap-4">
           {/* Search Type Tabs */}
           <div className="flex gap-2 overflow-x-auto pb-1">
@@ -106,7 +106,7 @@ export default function OSPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 searchType === "numero"
                   ? "bg-[#2563eb] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Número da OS
@@ -116,7 +116,7 @@ export default function OSPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 searchType === "cliente"
                   ? "bg-[#2563eb] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Nome do Cliente
@@ -126,7 +126,7 @@ export default function OSPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 searchType === "equipamento"
                   ? "bg-[#2563eb] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Equipamento
@@ -136,7 +136,7 @@ export default function OSPage() {
           {/* Search Input */}
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
               <input
                 type="text"
                 placeholder={
@@ -149,7 +149,7 @@ export default function OSPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               />
             </div>
             <button
@@ -161,7 +161,7 @@ export default function OSPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
             >
               <option value="">Todos os status</option>
               <option value="aberta">Aberta</option>
@@ -181,9 +181,9 @@ export default function OSPage() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2563eb]"></div>
           </div>
         ) : ordens.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-12 text-center">
             <Settings className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Nenhuma OS encontrada</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhuma OS encontrada</p>
           </div>
         ) : (
           ordens.map((os) => {
@@ -193,12 +193,12 @@ export default function OSPage() {
             return (
               <div
                 key={os.id}
-                className="bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-mono text-gray-400">#{os.numero}</span>
+                      <span className="text-sm font-mono text-gray-400 dark:text-gray-500">#{os.numero}</span>
                       <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${statusConfig.color}`}>
                         <StatusIcon size={12} />
                         {statusConfig.label}
@@ -209,13 +209,13 @@ export default function OSPage() {
                         </span>
                       )}
                     </div>
-                    <p className="font-medium text-gray-800">{os.descricao}</p>
+                    <p className="font-medium text-gray-800 dark:text-gray-100">{os.descricao}</p>
                     {os.equipamento && (
                       <p className="text-sm text-blue-600 mt-1">
                         {os.equipamento}
                       </p>
                     )}
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                       {os.cliente?.nome || "Cliente não informado"} •{" "}
                       {new Date(os.created_at).toLocaleDateString("pt-BR")}
                     </p>
@@ -229,20 +229,20 @@ export default function OSPage() {
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/os/${os.id}`}
-                      className="p-2 text-gray-400 hover:text-[#2563eb] hover:bg-blue-50 rounded-lg transition-all"
+                      className="p-2 text-gray-400 dark:text-gray-500 hover:text-[#2563eb] hover:bg-blue-50 rounded-lg transition-all"
                     >
                       <Eye size={18} />
                     </Link>
                     <Link
                       href={`/os/${os.id}?print=true`}
-                      className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
+                      className="p-2 text-gray-400 dark:text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all"
                       target="_blank"
                     >
                       <Printer size={18} />
                     </Link>
                     <button
                       onClick={() => handleDelete(os.id)}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                      className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
                     >
                       <Trash2 size={18} />
                     </button>

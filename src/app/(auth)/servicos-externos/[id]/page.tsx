@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -158,13 +158,13 @@ export default function EditarServicoExternoPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/servicos-externos"
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+            className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
           >
             <ArrowLeft size={24} />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Editar Serviço</h1>
-            <p className="text-gray-500 truncate max-w-xs sm:max-w-md">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Editar Serviço</h1>
+            <p className="text-gray-500 dark:text-gray-400 truncate max-w-xs sm:max-w-md">
               {servico.servico}
             </p>
           </div>
@@ -192,33 +192,33 @@ export default function EditarServicoExternoPage() {
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Cliente */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Cliente *
               </label>
               <input
                 type="text"
                 value={form.cliente_nome}
                 onChange={(e) => setForm({ ...form, cliente_nome: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 placeholder="Nome do cliente"
               />
             </div>
 
             {/* Telefone */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Telefone
               </label>
               <input
                 type="tel"
                 value={form.telefone}
                 onChange={(e) => setForm({ ...form, telefone: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 placeholder="(00) 00000-0000"
               />
             </div>
@@ -227,7 +227,7 @@ export default function EditarServicoExternoPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Tipo */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Tipo
               </label>
               <select
@@ -239,7 +239,7 @@ export default function EditarServicoExternoPage() {
                     recorrencia: e.target.value === "externo" ? null : form.recorrencia,
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               >
                 <option value="externo">Serviço Externo</option>
                 <option value="recorrente">Serviço Recorrente</option>
@@ -249,7 +249,7 @@ export default function EditarServicoExternoPage() {
             {/* Recorrência - condicional */}
             {form.tipo === "recorrente" && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Recorrência
                 </label>
                 <select
@@ -260,7 +260,7 @@ export default function EditarServicoExternoPage() {
                       recorrencia: e.target.value as ServicoExterno["recorrencia"],
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 >
                   <option value="">Selecione</option>
                   <option value="semanal">Semanal</option>
@@ -277,14 +277,14 @@ export default function EditarServicoExternoPage() {
 
           {/* Serviço */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Serviço *
             </label>
             <input
               type="text"
               value={form.servico}
               onChange={(e) => setForm({ ...form, servico: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               placeholder="Descrição do serviço"
             />
           </div>
@@ -292,20 +292,20 @@ export default function EditarServicoExternoPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Data do Serviço */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Data do Serviço *
               </label>
               <input
                 type="date"
                 value={form.data_servico}
                 onChange={(e) => setForm({ ...form, data_servico: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               />
             </div>
 
             {/* Valor */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Valor (R$)
               </label>
               <input
@@ -314,7 +314,7 @@ export default function EditarServicoExternoPage() {
                 min="0"
                 value={form.valor}
                 onChange={(e) => setForm({ ...form, valor: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 placeholder="0.00"
               />
             </div>
@@ -322,22 +322,22 @@ export default function EditarServicoExternoPage() {
 
           {/* Observações */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Observações
             </label>
             <textarea
               value={form.observacoes}
               onChange={(e) => setForm({ ...form, observacoes: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               rows={3}
               placeholder="Observações adicionais..."
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
             <Link
               href="/servicos-externos"
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-all text-center"
+              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all text-center"
             >
               Cancelar
             </Link>

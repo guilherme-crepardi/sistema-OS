@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { supabase, OrdemServico, IptvCliente, Cliente, ServicoExterno } from "@/lib/supabase";
@@ -171,15 +171,15 @@ export default function FinanceiroPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Financeiro</h1>
-        <p className="text-gray-500">Acompanhe seus ganhos e pagamentos</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Financeiro</h1>
+        <p className="text-gray-500 dark:text-gray-400">Acompanhe seus ganhos e pagamentos</p>
       </div>
 
       {/* Filtros */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
         <div className="flex items-center gap-2 mb-3">
-          <Filter size={18} className="text-gray-500" />
-          <span className="text-sm font-medium text-gray-700">Filtros</span>
+          <Filter size={18} className="text-gray-500 dark:text-gray-400" />
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filtros</span>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Período */}
@@ -191,7 +191,7 @@ export default function FinanceiroPage() {
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   periodo === p
                     ? "bg-[#2563eb] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
                 }`}
               >
                 {p === "diario" ? "Diário" : p === "semanal" ? "Semanal" : p === "mensal" ? "Mensal" : "Anual"}
@@ -213,7 +213,7 @@ export default function FinanceiroPage() {
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   origem === o.value
                     ? "bg-green-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
                 }`}
               >
                 {o.label}
@@ -234,7 +234,7 @@ export default function FinanceiroPage() {
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
                   statusPagamento === s.value
                     ? "bg-orange-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
                 }`}
               >
                 {s.label}
@@ -246,68 +246,68 @@ export default function FinanceiroPage() {
 
       {/* Cards de Resumo */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-[#2563eb] rounded-lg">
               <DollarSign className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">Total Geral</p>
-              <p className="text-lg font-bold text-gray-800">R$ {totalGeral.toFixed(2).replace(".", ",")}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Total Geral</p>
+              <p className="text-lg font-bold text-gray-800 dark:text-gray-100">R$ {totalGeral.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-green-500 rounded-lg">
               <CheckCircle className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">Recebido</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Recebido</p>
               <p className="text-lg font-bold text-green-600">R$ {totalPago.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-red-500 rounded-lg">
               <Clock className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">A Receber</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">A Receber</p>
               <p className="text-lg font-bold text-red-600">R$ {totalNaoPago.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-blue-500 rounded-lg">
               <TrendingUp className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">OS</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">OS</p>
               <p className="text-lg font-bold text-blue-600">R$ {totalOS.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-purple-500 rounded-lg">
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">IPTV</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">IPTV</p>
               <p className="text-lg font-bold text-purple-600">R$ {totalIPTV.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-orange-500 rounded-lg">
               <TrendingUp className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">Externos</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Externos</p>
               <p className="text-lg font-bold text-orange-600">R$ {totalExt.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
@@ -315,44 +315,44 @@ export default function FinanceiroPage() {
       </div>
 
       {/* Tabela de Transações */}
-      <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
-        <div className="p-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-800">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-x-auto">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
             Transações ({transacoes.length})
           </h3>
         </div>
         {transacoes.length === 0 ? (
           <div className="text-center py-12">
             <DollarSign className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Nenhuma transação encontrada</p>
+            <p className="text-gray-500 dark:text-gray-400">Nenhuma transação encontrada</p>
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
               <tr>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                   Tipo
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                   Descrição
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase hidden sm:table-cell">
                   Cliente
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                   Valor
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                   Status
                 </th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden md:table-cell">
+                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase hidden md:table-cell">
                   Data
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {transacoes.map((t) => (
-                <tr key={`${t.origem}-${t.id}`} className="hover:bg-gray-50 transition-colors">
+                <tr key={`${t.origem}-${t.id}`} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                   <td className="px-4 sm:px-6 py-4">
                     <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       t.origem === "OS" ? "bg-blue-100 text-blue-700" : t.origem === "IPTV" ? "bg-purple-100 text-purple-700" : "bg-orange-100 text-orange-700"
@@ -361,10 +361,10 @@ export default function FinanceiroPage() {
                     </span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
-                    <p className="font-medium text-gray-800 text-sm">{t.descricao}</p>
-                    <p className="text-xs text-gray-500 sm:hidden">{t.cliente}</p>
+                    <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">{t.descricao}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 sm:hidden">{t.cliente}</p>
                   </td>
-                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">
+                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-600 dark:text-gray-400 hidden sm:table-cell">
                     {t.cliente}
                   </td>
                   <td className="px-4 sm:px-6 py-4">
@@ -385,7 +385,7 @@ export default function FinanceiroPage() {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 hidden md:table-cell">
+                  <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">
                     {new Date(t.data).toLocaleDateString("pt-BR")}
                   </td>
                 </tr>

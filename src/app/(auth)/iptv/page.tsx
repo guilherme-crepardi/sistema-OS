@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -158,8 +158,8 @@ export default function IPTVPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">IPTV</h1>
-          <p className="text-gray-500">Gerencie seus clientes de IPTV</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">IPTV</h1>
+          <p className="text-gray-500 dark:text-gray-400">Gerencie seus clientes de IPTV</p>
         </div>
         <div className="flex gap-2">
           {vencendoList.length > 0 && (
@@ -188,7 +188,7 @@ export default function IPTVPage() {
         <StatCard title="Ativos" value={stats.ativos} icon={CheckCircle} color="bg-green-500" />
         <StatCard title="Pendentes" value={stats.pendentes} icon={Clock} color="bg-yellow-500" />
         <StatCard title="Vencidos" value={stats.vencidos} icon={XCircle} color="bg-red-500" />
-        <StatCard title="Cancelados" value={stats.cancelados} icon={XCircle} color="bg-gray-500" />
+        <StatCard title="Cancelados" value={stats.cancelados} icon={XCircle} color="bg-gray-50 dark:bg-gray-700/500" />
         <StatCard title="Vencendo (3 dias)" value={stats.vencendo} icon={AlertTriangle} color="bg-orange-500" />
       </div>
 
@@ -205,14 +205,14 @@ export default function IPTVPage() {
                 (new Date(cliente.data_vencimento).getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
               );
               return (
-                <div key={cliente.id} className="flex items-center justify-between bg-white rounded-lg p-3">
+                <div key={cliente.id} className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3">
                   <div>
                     <p className="font-medium">{cliente.nome}</p>
-                    <p className="text-sm text-gray-500">{cliente.telefone}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{cliente.telefone}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-medium text-yellow-700">Vence em {diasRestantes} dia(s)</p>
-                    <p className="text-xs text-gray-500">{new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}</p>
                   </div>
                 </div>
               );
@@ -222,7 +222,7 @@ export default function IPTVPage() {
       )}
 
       {/* Seção de Pagamento por Mês */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
         <div className="flex flex-col gap-4">
           {/* Filtros */}
           <div className="flex flex-col sm:flex-row gap-4">
@@ -230,7 +230,7 @@ export default function IPTVPage() {
             <select
               value={mesSelecionado}
               onChange={(e) => setMesSelecionado(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
             >
               {mesesOrdenados.map((m) => {
                 const [a, mes] = m.split("-");
@@ -252,7 +252,7 @@ export default function IPTVPage() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                     filtroPagamento === tab.value
                       ? `${tab.color} text-white`
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600"
                   }`}
                 >
                   {tab.label}
@@ -262,13 +262,13 @@ export default function IPTVPage() {
 
             {/* Busca */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
               <input
                 type="text"
                 placeholder="Buscar..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               />
             </div>
           </div>
@@ -300,42 +300,42 @@ export default function IPTVPage() {
             {clientesFiltrados.length === 0 ? (
               <div className="text-center py-8">
                 <Tv className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">Nenhum cliente encontrado</p>
+                <p className="text-gray-500 dark:text-gray-400">Nenhum cliente encontrado</p>
               </div>
             ) : (
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">Telefone</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Cliente</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase hidden sm:table-cell">Telefone</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Vencimento</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Valor</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {clientesFiltrados.map((cliente) => {
                     const isVencido = new Date(cliente.data_vencimento) < new Date();
                     return (
-                      <tr key={cliente.id} className="hover:bg-gray-50 transition-colors">
+                      <tr key={cliente.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-[#2563eb] rounded-full flex items-center justify-center text-white text-sm font-medium">
                               {cliente.nome.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                              <p className="font-medium text-gray-800 text-sm">{cliente.nome}</p>
+                              <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">{cliente.nome}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-600 hidden sm:table-cell">{cliente.telefone}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hidden sm:table-cell">{cliente.telefone}</td>
                         <td className="px-4 py-3">
-                          <p className={`text-sm ${isVencido ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                          <p className={`text-sm ${isVencido ? "text-red-600 font-medium" : "text-gray-600 dark:text-gray-400"}`}>
                             {new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}
                           </p>
                         </td>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-800">
+                        <td className="px-4 py-3 text-sm font-medium text-gray-800 dark:text-gray-100">
                           R$ {cliente.valor.toFixed(2).replace(".", ",")}
                         </td>
                         <td className="px-4 py-3">
@@ -387,7 +387,7 @@ export default function IPTVPage() {
       {/* Link para lista completa */}
       <Link
         href="/iptv/clientes"
-        className="block bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow"
+        className="block bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -395,11 +395,11 @@ export default function IPTVPage() {
               <Tv className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="font-medium text-gray-800">Ver Todos os Clientes</p>
-              <p className="text-sm text-gray-500">{stats.total} clientes cadastrados</p>
+              <p className="font-medium text-gray-800 dark:text-gray-100">Ver Todos os Clientes</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{stats.total} clientes cadastrados</p>
             </div>
           </div>
-          <span className="text-gray-400">→</span>
+          <span className="text-gray-400 dark:text-gray-500">→</span>
         </div>
       </Link>
     </div>
@@ -418,14 +418,14 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
       <div className="flex items-center gap-3">
         <div className={`w-10 h-10 ${color} rounded-lg flex items-center justify-center`}>
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className="text-sm text-gray-500">{title}</p>
-          <p className="text-xl font-bold text-gray-800">{value}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+          <p className="text-xl font-bold text-gray-800 dark:text-gray-100">{value}</p>
         </div>
       </div>
     </div>

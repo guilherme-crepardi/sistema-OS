@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -125,8 +125,8 @@ export default function DashboardPage() {
 
       {/* Status das OS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Ordens de Serviço</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Ordens de Serviço</h3>
           <div className="space-y-3">
             <StatusRow
               label="Abertas"
@@ -149,8 +149,8 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Status IPTV</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Status IPTV</h3>
           <div className="space-y-3">
             <StatusRow
               label="Ativos"
@@ -177,30 +177,30 @@ export default function DashboardPage() {
       {/* Listas de OS por Status */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Em Andamento */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
               <span className="w-3 h-3 bg-yellow-500 rounded-full"></span>
               Em Andamento
-              <span className="text-sm font-normal text-gray-400">({osEmAndamento.length})</span>
+              <span className="text-sm font-normal text-gray-400 dark:text-gray-500">({osEmAndamento.length})</span>
             </h3>
           </div>
           <div className="space-y-3">
             {osEmAndamento.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-4">Nenhuma OS em andamento</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">Nenhuma OS em andamento</p>
             ) : (
               osEmAndamento.map((os) => (
                 <Link
                   key={os.id}
                   href={`/os/${os.id}`}
-                  className="block p-3 rounded-lg border border-gray-100 hover:border-yellow-200 hover:bg-yellow-50 transition-all"
+                  className="block p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-yellow-200 hover:bg-yellow-50 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-800">OS #{os.numero}</p>
-                      <p className="text-xs text-gray-500">{os.equipamento || os.descricao}</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-100">OS #{os.numero}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{os.equipamento || os.descricao}</p>
                     </div>
-                    <span className="text-xs text-gray-400">{os.cliente?.nome}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">{os.cliente?.nome}</span>
                   </div>
                 </Link>
               ))
@@ -209,30 +209,30 @@ export default function DashboardPage() {
         </div>
 
         {/* Prontas */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
               <span className="w-3 h-3 bg-green-500 rounded-full"></span>
               Prontas
-              <span className="text-sm font-normal text-gray-400">({osProntas.length})</span>
+              <span className="text-sm font-normal text-gray-400 dark:text-gray-500">({osProntas.length})</span>
             </h3>
           </div>
           <div className="space-y-3">
             {osProntas.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-4">Nenhuma OS pronta</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">Nenhuma OS pronta</p>
             ) : (
               osProntas.map((os) => (
                 <Link
                   key={os.id}
                   href={`/os/${os.id}`}
-                  className="block p-3 rounded-lg border border-gray-100 hover:border-green-200 hover:bg-green-50 transition-all"
+                  className="block p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-green-200 hover:bg-green-50 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-800">OS #{os.numero}</p>
-                      <p className="text-xs text-gray-500">{os.equipamento || os.descricao}</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-100">OS #{os.numero}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{os.equipamento || os.descricao}</p>
                     </div>
-                    <span className="text-xs text-gray-400">{os.cliente?.nome}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">{os.cliente?.nome}</span>
                   </div>
                 </Link>
               ))
@@ -241,30 +241,30 @@ export default function DashboardPage() {
         </div>
 
         {/* Entregues */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
               <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
               Entregues
-              <span className="text-sm font-normal text-gray-400">({osEntregues.length})</span>
+              <span className="text-sm font-normal text-gray-400 dark:text-gray-500">({osEntregues.length})</span>
             </h3>
           </div>
           <div className="space-y-3">
             {osEntregues.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-4">Nenhuma OS entregue</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">Nenhuma OS entregue</p>
             ) : (
               osEntregues.map((os) => (
                 <Link
                   key={os.id}
                   href={`/os/${os.id}`}
-                  className="block p-3 rounded-lg border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all"
+                  className="block p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:border-blue-200 hover:bg-blue-50 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-800">OS #{os.numero}</p>
-                      <p className="text-xs text-gray-500">{os.equipamento || os.descricao}</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-100">OS #{os.numero}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{os.equipamento || os.descricao}</p>
                     </div>
-                    <span className="text-xs text-gray-400">{os.cliente?.nome}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">{os.cliente?.nome}</span>
                   </div>
                 </Link>
               ))
@@ -295,11 +295,11 @@ function StatCard({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-500">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 mt-1">{value}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+          <p className="text-3xl font-bold text-gray-800 dark:text-gray-100 mt-1">{value}</p>
         </div>
         <div className={`w-12 h-12 ${colorClasses[color]} rounded-xl flex items-center justify-center`}>
           <Icon className="w-6 h-6 text-white" />
@@ -325,10 +325,10 @@ function StatusRow({
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm text-gray-600">{label}</span>
-        <span className="text-sm font-medium text-gray-800">{value}</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400">{label}</span>
+        <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{value}</span>
       </div>
-      <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
         <div
           className={`h-full ${color} rounded-full transition-all duration-500`}
           style={{ width: `${percentage}%` }}

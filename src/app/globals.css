@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --blue-50: #eff6ff;
   --blue-100: #dbeafe;
@@ -28,6 +30,12 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--gray-100);
   color: var(--gray-800);
+}
+
+.dark body,
+html.dark body {
+  background-color: #111827;
+  color: #f3f4f6;
 }
 
 /* Custom scrollbar */

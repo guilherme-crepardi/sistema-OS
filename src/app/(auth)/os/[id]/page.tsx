@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -158,13 +158,13 @@ export default function DetalheOSPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/os"
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+            className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
           >
             <ArrowLeft size={24} />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">OS #{os.numero}</h1>
-            <p className="text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">OS #{os.numero}</h1>
+            <p className="text-gray-500 dark:text-gray-400">
               Criada em {new Date(os.created_at).toLocaleDateString("pt-BR")}
             </p>
           </div>
@@ -221,7 +221,7 @@ export default function DetalheOSPage() {
                     observacoes: os.observacoes || "",
                   });
                 }}
-                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gray-50 dark:bg-gray-700/500 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm"
               >
                 <X size={16} />
                 <span className="hidden sm:inline">Cancelar</span>
@@ -240,7 +240,7 @@ export default function DetalheOSPage() {
       </div>
 
       {/* Print Layout */}
-      <div ref={printRef} className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div ref={printRef} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
         {/* Header do documento */}
         <div className="bg-[#1e3a8a] text-white p-6 text-center">
           <h1 className="text-2xl font-bold">MASTERTECH ELETRÔNICA</h1>
@@ -249,9 +249,9 @@ export default function DetalheOSPage() {
 
         <div className="p-6">
           {/* Número e Status */}
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <div>
-              <p className="text-sm text-gray-500">ORDEM DE SERVIÇO</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">ORDEM DE SERVIÇO</p>
               <p className="text-2xl font-bold text-[#1e3a8a]">Nº {os.numero}</p>
             </div>
             <div className="flex items-center gap-2">
@@ -266,22 +266,22 @@ export default function DetalheOSPage() {
 
           {/* Dados do Cliente */}
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-500 mb-2">DADOS DO CLIENTE</h3>
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">DADOS DO CLIENTE</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">Nome</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Nome</p>
                 <p className="font-medium">{os.cliente?.nome || "—"}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Telefone</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Telefone</p>
                 <p className="font-medium">{os.cliente?.telefone || "—"}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">CPF</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">CPF</p>
                 <p className="font-medium">{os.cliente?.cpf || "—"}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Email</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
                 <p className="font-medium">{os.cliente?.email || "—"}</p>
               </div>
             </div>
@@ -289,26 +289,26 @@ export default function DetalheOSPage() {
 
           {/* Dados do Serviço */}
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-500 mb-2">SERVIÇO</h3>
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">SERVIÇO</h3>
             <div className="space-y-3">
               {os.equipamento && (
                 <div>
-                  <p className="text-sm text-gray-500">Equipamento</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Equipamento</p>
                   <p className="font-medium">{os.equipamento}</p>
                 </div>
               )}
               <div>
-                <p className="text-sm text-gray-500">Serviço Realizado</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Serviço Realizado</p>
                 <p className="font-medium">{os.descricao || "—"}</p>
               </div>
               {os.problema && (
                 <div>
-                  <p className="text-sm text-gray-500">Problema Relatado</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Problema Relatado</p>
                   <p className="font-medium">{os.problema}</p>
                 </div>
               )}
               <div>
-                <p className="text-sm text-gray-500">Valor</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Valor</p>
                 <p className="text-xl font-bold text-[#1e3a8a]">
                   R$ {os.valor.toFixed(2).replace(".", ",")}
                 </p>
@@ -319,21 +319,21 @@ export default function DetalheOSPage() {
           {/* Observações */}
           {os.observacoes && (
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-gray-500 mb-2">OBSERVAÇÕES</h3>
-              <p className="text-gray-700">{os.observacoes}</p>
+              <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">OBSERVAÇÕES</h3>
+              <p className="text-gray-700 dark:text-gray-300">{os.observacoes}</p>
             </div>
           )}
 
           {/* Assinatura */}
-          <div className="pt-8 border-t border-gray-200">
+          <div className="pt-8 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col sm:flex-row justify-between gap-8">
               <div className="text-center">
                 <div className="w-48 border-b border-gray-400 mb-2"></div>
-                <p className="text-sm text-gray-500">Assinatura do Cliente</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Assinatura do Cliente</p>
               </div>
               <div className="text-center">
                 <div className="w-48 border-b border-gray-400 mb-2"></div>
-                <p className="text-sm text-gray-500">Responsável Técnico</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Responsável Técnico</p>
               </div>
             </div>
           </div>
@@ -342,18 +342,18 @@ export default function DetalheOSPage() {
 
       {/* Edição - no print */}
       {editing && (
-        <div className="mt-6 bg-white rounded-xl shadow-sm p-6 no-print">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Editar OS</h3>
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 no-print">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Editar OS</h3>
           <div className="space-y-4">
             {/* Cliente */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Cliente
               </label>
               <select
                 value={form.cliente_id}
                 onChange={(e) => setForm({ ...form, cliente_id: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
               >
                 <option value="">Selecione um cliente</option>
                 {clientes.map((c) => (
@@ -366,41 +366,41 @@ export default function DetalheOSPage() {
 
             {/* Equipamento */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Equipamento / Aparelho
               </label>
               <input
                 type="text"
                 value={form.equipamento}
                 onChange={(e) => setForm({ ...form, equipamento: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 placeholder="Ex: Samsung Galaxy S23, Notebook Dell..."
               />
             </div>
 
             {/* Descrição */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Serviço Realizado
               </label>
               <input
                 type="text"
                 value={form.descricao}
                 onChange={(e) => setForm({ ...form, descricao: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 placeholder="Ex: Formatação completa, Troca de tela..."
               />
             </div>
 
             {/* Problema */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Problema Relatado
               </label>
               <textarea
                 value={form.problema}
                 onChange={(e) => setForm({ ...form, problema: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 rows={3}
               />
             </div>
@@ -408,7 +408,7 @@ export default function DetalheOSPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Valor */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Valor (R$)
                 </label>
                 <input
@@ -417,19 +417,19 @@ export default function DetalheOSPage() {
                   min="0"
                   value={form.valor}
                   onChange={(e) => setForm({ ...form, valor: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 />
               </div>
 
               {/* Status */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Status
                 </label>
                 <select
                   value={form.status}
                   onChange={(e) => setForm({ ...form, status: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 >
                   <option value="aberta">Aberta</option>
                   <option value="em_andamento">Em Andamento</option>
@@ -442,18 +442,18 @@ export default function DetalheOSPage() {
 
             {/* Observações */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Observações
               </label>
               <textarea
                 value={form.observacoes}
                 onChange={(e) => setForm({ ...form, observacoes: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
                 rows={3}
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
               <button
                 onClick={() => {
                   setEditing(false);
@@ -467,7 +467,7 @@ export default function DetalheOSPage() {
                     observacoes: os.observacoes || "",
                   });
                 }}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
               >
                 Cancelar
               </button>
