@@ -11,6 +11,7 @@ const STATUS_CONFIG = {
   em_andamento: { label: "Em Andamento", color: "bg-yellow-100 text-yellow-700" },
   aguardando_peca: { label: "Aguardando Peça", color: "bg-orange-100 text-orange-700" },
   pronta: { label: "Pronta", color: "bg-green-100 text-green-700" },
+  entregue: { label: "Entregue", color: "bg-blue-100 text-blue-700" },
 };
 
 export default function DetalheOSPage() {
@@ -434,6 +435,7 @@ export default function DetalheOSPage() {
                   <option value="em_andamento">Em Andamento</option>
                   <option value="aguardando_peca">Aguardando Peça</option>
                   <option value="pronta">Pronta</option>
+                  <option value="entregue">Entregue</option>
                 </select>
               </div>
             </div>
