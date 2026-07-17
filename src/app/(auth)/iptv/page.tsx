@@ -44,6 +44,8 @@ export default function IPTVPage() {
         new Date(c.data_vencimento) <= threeDaysFromNow &&
         new Date(c.data_vencimento) >= today
     ).length,
+    pendentes: clientes.filter((c) => !c.pagou).length,
+    totalReceber: clientes.filter((c) => !c.pagou).reduce((acc, c) => acc + c.valor, 0),
   };
 
   const vencendoList = clientes.filter(
@@ -112,7 +114,7 @@ export default function IPTVPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
         <StatCard
           title="Total"
           value={stats.total}
@@ -124,6 +126,12 @@ export default function IPTVPage() {
           value={stats.ativos}
           icon={CheckCircle}
           color="bg-green-500"
+        />
+        <StatCard
+          title="Pendentes"
+          value={stats.pendentes}
+          icon={Clock}
+          color="bg-yellow-500"
         />
         <StatCard
           title="Vencidos"
@@ -138,10 +146,10 @@ export default function IPTVPage() {
           color="bg-gray-500"
         />
         <StatCard
-          title="Vencendo (3 dias)"
-          value={stats.vencendo}
+          title="A Receber"
+          value={`R$ ${stats.totalReceber.toFixed(2).replace(".", ",")}`}
           icon={AlertTriangle}
-          color="bg-yellow-500"
+          color="bg-orange-500"
         />
       </div>
 
@@ -210,7 +218,7 @@ function StatCard({
   color,
 }: {
   title: string;
-  value: number;
+  value: number | string;
   icon: React.ElementType;
   color: string;
 }) {

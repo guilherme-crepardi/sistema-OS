@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase, IptvCliente } from "@/lib/supabase";
-import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, DollarSign } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, DollarSign, AlertTriangle } from "lucide-react";
 
 const STATUS_CONFIG = {
   ativo: { label: "Ativo", color: "bg-green-100 text-green-700", icon: CheckCircle },
@@ -17,6 +17,7 @@ export default function IPTVClientesPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [paymentFilter, setPaymentFilter] = useState<"todos" | "pago" | "nao_pago">("todos");
+  const [mesResetado, setMesResetado] = useState(false);
 
   useEffect(() => {
     resetMonthlyPayments();
@@ -37,6 +38,7 @@ export default function IPTVClientesPage() {
         .eq("pagou", true);
 
       localStorage.setItem("iptv_last_reset_month", currentMonth);
+      setMesResetado(true);
     } catch (error) {
       console.error("Erro ao resetar pagamentos:", error);
     }
@@ -148,6 +150,10 @@ export default function IPTVClientesPage() {
   const clientesPagos = clientes.filter((c) => c.pagou).length;
   const clientesNaoPagos = clientes.filter((c) => !c.pagou).length;
 
+  const now = new Date();
+  const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  const mesAtual = now.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -165,27 +171,60 @@ export default function IPTVClientesPage() {
         </Link>
       </div>
 
+      {/* Aviso de Reset Mensal */}
+      {mesResetado && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-3">
+          <div className="p-2 bg-yellow-100 rounded-lg">
+            <AlertTriangle className="w-5 h-5 text-yellow-600" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-yellow-800">Pagamentos Resetados</p>
+            <p className="text-xs text-yellow-600">
+              Novo mês iniciado! Todos os clientes foram marcados como pendente de pagamento. 
+              Confirme os pagamentos conforme forem recebidos.
+            </p>
+          </div>
+          <button
+            onClick={() => setMesResetado(false)}
+            className="ml-auto text-yellow-400 hover:text-yellow-600"
+          >
+            <XCircle size={18} />
+          </button>
+        </div>
+      )}
+
       {/* Stats de Pagamento */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-green-100 rounded-lg">
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Clientes Pagos</p>
+              <p className="text-sm text-gray-500">Pagos em {mesAtual}</p>
               <p className="text-2xl font-bold text-green-600">{clientesPagos}</p>
             </div>
           </div>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-red-100 rounded-lg">
-              <XCircle className="w-6 h-6 text-red-600" />
+            <div className="p-3 bg-yellow-100 rounded-lg">
+              <Clock className="w-6 h-6 text-yellow-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Clientes Não Pagos</p>
-              <p className="text-2xl font-bold text-red-600">{clientesNaoPagos}</p>
+              <p className="text-sm text-gray-500">Pendentes em {mesAtual}</p>
+              <p className="text-2xl font-bold text-yellow-600">{clientesNaoPagos}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-red-100 rounded-lg">
+              <DollarSign className="w-6 h-6 text-red-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">A Receber</p>
+              <p className="text-2xl font-bold text-red-600">R$ {clientes.filter(c => !c.pagou).reduce((acc, c) => acc + c.valor, 0).toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
         </div>
@@ -221,12 +260,12 @@ export default function IPTVClientesPage() {
               onClick={() => setPaymentFilter("nao_pago")}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
                 paymentFilter === "nao_pago"
-                  ? "bg-red-600 text-white"
+                  ? "bg-yellow-500 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              <XCircle size={16} />
-              Não Pagos
+              <Clock size={16} />
+              Pendentes
             </button>
           </div>
 
@@ -327,9 +366,9 @@ export default function IPTVClientesPage() {
                             Pago
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                            <DollarSign size={12} />
-                            Não Pago
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                            <Clock size={12} />
+                            Pendente
                           </span>
                         )}
                       </td>
