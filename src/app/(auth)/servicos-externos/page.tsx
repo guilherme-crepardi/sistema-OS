@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase, ServicoExterno } from "@/lib/supabase";
-import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, MapPin, Repeat, DollarSign } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, MapPin, Repeat, DollarSign, Calendar } from "lucide-react";
 
 type Filtro = "todos" | "externo" | "recorrente" | "pago" | "nao_pago";
 type Periodo = "diario" | "semanal" | "mensal" | "anual";
@@ -24,6 +24,8 @@ export default function ServicosExternosPage() {
   const [search, setSearch] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [periodo, setPeriodo] = useState<Periodo>("mensal");
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState("");
 
   useEffect(() => {
     loadServicos();
@@ -72,24 +74,34 @@ export default function ServicosExternosPage() {
   const filtrados = servicos.filter((s) => {
     const data = new Date(s.data_servico || s.created_at);
     const now = new Date();
-    const inicio = new Date(now);
 
-    switch (periodo) {
-      case "diario":
-        inicio.setHours(0, 0, 0, 0);
-        break;
-      case "semanal":
-        inicio.setDate(now.getDate() - 7);
-        break;
-      case "mensal":
-        inicio.setMonth(now.getMonth() - 1);
-        break;
-      case "anual":
-        inicio.setFullYear(now.getFullYear() - 1);
-        break;
+    if (dataInicio || dataFim) {
+      if (dataInicio) {
+        const inicio = new Date(dataInicio + "T00:00:00");
+        if (data < inicio) return false;
+      }
+      if (dataFim) {
+        const fim = new Date(dataFim + "T23:59:59");
+        if (data > fim) return false;
+      }
+    } else {
+      const inicio = new Date(now);
+      switch (periodo) {
+        case "diario":
+          inicio.setHours(0, 0, 0, 0);
+          break;
+        case "semanal":
+          inicio.setDate(now.getDate() - 7);
+          break;
+        case "mensal":
+          inicio.setMonth(now.getMonth() - 1);
+          break;
+        case "anual":
+          inicio.setFullYear(now.getFullYear() - 1);
+          break;
+      }
+      if (data < inicio) return false;
     }
-
-    if (data < inicio) return false;
 
     if (!search) return true;
     return s.cliente_nome.toLowerCase().includes(search.toLowerCase());
@@ -191,9 +203,9 @@ export default function ServicosExternosPage() {
             ]).map((p) => (
               <button
                 key={p.value}
-                onClick={() => setPeriodo(p.value)}
+                onClick={() => { setPeriodo(p.value); setDataInicio(""); setDataFim(""); }}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
-                  periodo === p.value
+                  !dataInicio && !dataFim && periodo === p.value
                     ? "bg-[#2563eb] text-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
@@ -201,6 +213,37 @@ export default function ServicosExternosPage() {
                 {p.label}
               </button>
             ))}
+          </div>
+
+          {/* Filtro por Data */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Calendar size={16} className="text-gray-400" />
+              <span className="text-sm text-gray-600 font-medium">Período:</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="date"
+                value={dataInicio}
+                onChange={(e) => setDataInicio(e.target.value)}
+                className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              />
+              <span className="text-sm text-gray-400">até</span>
+              <input
+                type="date"
+                value={dataFim}
+                onChange={(e) => setDataFim(e.target.value)}
+                className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              />
+              {(dataInicio || dataFim) && (
+                <button
+                  onClick={() => { setDataInicio(""); setDataFim(""); }}
+                  className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Tabs */}
