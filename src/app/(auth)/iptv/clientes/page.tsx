@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase, IptvCliente } from "@/lib/supabase";
-import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, DollarSign, AlertTriangle } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, DollarSign, AlertTriangle, ArrowLeft } from "lucide-react";
 
 const STATUS_CONFIG = {
   ativo: { label: "Ativo", color: "bg-green-100 text-green-700", icon: CheckCircle },
@@ -158,9 +158,17 @@ export default function IPTVClientesPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Clientes IPTV</h1>
-          <p className="text-gray-500">Gerencie seus clientes de IPTV</p>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/iptv"
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
+          >
+            <ArrowLeft size={20} />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">Clientes IPTV</h1>
+            <p className="text-gray-500">Gerencie seus clientes de IPTV</p>
+          </div>
         </div>
         <Link
           href="/iptv/clientes/novo"
