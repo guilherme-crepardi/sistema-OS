@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "MasterTech Eletrônica OS",
   description: "MasterTech Eletrônica - Sistema de OS e Gestão de Clientes",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
