@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Users, Settings, Tv, AlertTriangle, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Users, Settings, Tv, AlertTriangle, Clock, CheckCircle, XCircle, Wrench } from "lucide-react";
+import Link from "next/link";
+import { OrdemServico, Cliente } from "@/lib/supabase";
 
 interface Stats {
   totalClientes: number;
@@ -29,6 +31,9 @@ export default function DashboardPage() {
     iptvVencendo: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [osEmAndamento, setOsEmAndamento] = useState<(OrdemServico & { cliente?: Cliente })[]>([]);
+  const [osProntas, setOsProntas] = useState<(OrdemServico & { cliente?: Cliente })[]>([]);
+  const [osEntregues, setOsEntregues] = useState<(OrdemServico & { cliente?: Cliente })[]>([]);
 
   useEffect(() => {
     loadStats();
@@ -36,10 +41,13 @@ export default function DashboardPage() {
 
   async function loadStats() {
     try {
-      const [clientes, os, iptv] = await Promise.all([
+      const [clientes, os, iptv, osAndamento, osPronta, osEntregue] = await Promise.all([
         supabase.from("clientes").select("id", { count: "exact", head: true }),
         supabase.from("ordens_servico").select("status"),
         supabase.from("iptv_clientes").select("status, data_vencimento"),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("status", "em_andamento").order("created_at", { ascending: false }),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("status", "pronta").order("created_at", { ascending: false }),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("status", "entregue").order("created_at", { ascending: false }).limit(10),
       ]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,6 +74,10 @@ export default function DashboardPage() {
             new Date(i.data_vencimento) >= today
         ).length,
       });
+
+      setOsEmAndamento(osAndamento.data || []);
+      setOsProntas(osPronta.data || []);
+      setOsEntregues(osEntregue.data || []);
     } catch (error) {
       console.error("Erro ao carregar stats:", error);
     } finally {
@@ -158,6 +170,105 @@ export default function DashboardPage() {
               total={stats.totalIptv}
               color="bg-yellow-500"
             />
+          </div>
+        </div>
+      </div>
+
+      {/* Listas de OS por Status */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Em Andamento */}
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <span className="w-3 h-3 bg-yellow-500 rounded-full"></span>
+              Em Andamento
+              <span className="text-sm font-normal text-gray-400">({osEmAndamento.length})</span>
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {osEmAndamento.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">Nenhuma OS em andamento</p>
+            ) : (
+              osEmAndamento.map((os) => (
+                <Link
+                  key={os.id}
+                  href={`/os/${os.id}`}
+                  className="block p-3 rounded-lg border border-gray-100 hover:border-yellow-200 hover:bg-yellow-50 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">OS #{os.numero}</p>
+                      <p className="text-xs text-gray-500">{os.equipamento || os.descricao}</p>
+                    </div>
+                    <span className="text-xs text-gray-400">{os.cliente?.nome}</span>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Prontas */}
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+              Prontas
+              <span className="text-sm font-normal text-gray-400">({osProntas.length})</span>
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {osProntas.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">Nenhuma OS pronta</p>
+            ) : (
+              osProntas.map((os) => (
+                <Link
+                  key={os.id}
+                  href={`/os/${os.id}`}
+                  className="block p-3 rounded-lg border border-gray-100 hover:border-green-200 hover:bg-green-50 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">OS #{os.numero}</p>
+                      <p className="text-xs text-gray-500">{os.equipamento || os.descricao}</p>
+                    </div>
+                    <span className="text-xs text-gray-400">{os.cliente?.nome}</span>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Entregues */}
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
+              Entregues
+              <span className="text-sm font-normal text-gray-400">({osEntregues.length})</span>
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {osEntregues.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-4">Nenhuma OS entregue</p>
+            ) : (
+              osEntregues.map((os) => (
+                <Link
+                  key={os.id}
+                  href={`/os/${os.id}`}
+                  className="block p-3 rounded-lg border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-800">OS #{os.numero}</p>
+                      <p className="text-xs text-gray-500">{os.equipamento || os.descricao}</p>
+                    </div>
+                    <span className="text-xs text-gray-400">{os.cliente?.nome}</span>
+                  </div>
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </div>
