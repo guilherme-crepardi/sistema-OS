@@ -22,6 +22,19 @@ export default function IPTVPage() {
     loadClientes();
   }, []);
 
+  useEffect(() => {
+    if (clientes.length === 0) return;
+    const meses = new Set<string>();
+    clientes.forEach((c) => {
+      const d = new Date(c.data_vencimento);
+      meses.add(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+    });
+    if (!meses.has(mesSelecionado)) {
+      const sorted = Array.from(meses).sort().reverse();
+      if (sorted.length > 0) setMesSelecionado(sorted[0]);
+    }
+  }, [clientes]);
+
   async function loadClientes() {
     try {
       const { data, error } = await supabase
@@ -194,8 +207,8 @@ export default function IPTVPage() {
 
       {/* Lista de clientes vencendo */}
       {vencendoList.length > 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-          <h3 className="text-lg font-semibold text-yellow-800 mb-3 flex items-center gap-2">
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
+          <h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-300 mb-3 flex items-center gap-2">
             <AlertTriangle size={20} />
             Planos Vencendo em Breve
           </h3>
@@ -275,23 +288,23 @@ export default function IPTVPage() {
 
           {/* Resumo do Mês */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-green-50 rounded-lg p-3 text-center">
-              <p className="text-xs text-green-600 font-medium">Pagos</p>
-              <p className="text-lg font-bold text-green-700">{stats.pagos}</p>
-              <p className="text-xs text-green-500">R$ {stats.totalPago.toFixed(2).replace(".", ",")}</p>
+            <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 text-center">
+              <p className="text-xs text-green-600 dark:text-green-400 font-medium">Pagos</p>
+              <p className="text-lg font-bold text-green-700 dark:text-green-300">{stats.pagos}</p>
+              <p className="text-xs text-green-500 dark:text-green-400">R$ {stats.totalPago.toFixed(2).replace(".", ",")}</p>
             </div>
-            <div className="bg-yellow-50 rounded-lg p-3 text-center">
-              <p className="text-xs text-yellow-600 font-medium">Pendentes</p>
-              <p className="text-lg font-bold text-yellow-700">{stats.pendentes}</p>
-              <p className="text-xs text-yellow-500">R$ {stats.totalReceber.toFixed(2).replace(".", ",")}</p>
+            <div className="bg-yellow-50 dark:bg-yellow-900/30 rounded-lg p-3 text-center">
+              <p className="text-xs text-yellow-600 dark:text-yellow-400 font-medium">Pendentes</p>
+              <p className="text-lg font-bold text-yellow-700 dark:text-yellow-300">{stats.pendentes}</p>
+              <p className="text-xs text-yellow-500 dark:text-yellow-400">R$ {stats.totalReceber.toFixed(2).replace(".", ",")}</p>
             </div>
-            <div className="bg-blue-50 rounded-lg p-3 text-center">
-              <p className="text-xs text-blue-600 font-medium">Total no Mês</p>
-              <p className="text-lg font-bold text-blue-700">{clientesMes.length}</p>
+            <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+              <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">Total no Mês</p>
+              <p className="text-lg font-bold text-blue-700 dark:text-blue-300">{clientesMes.length}</p>
             </div>
-            <div className="bg-orange-50 rounded-lg p-3 text-center">
-              <p className="text-xs text-orange-600 font-medium">A Receber</p>
-              <p className="text-lg font-bold text-orange-700">R$ {stats.totalReceber.toFixed(2).replace(".", ",")}</p>
+            <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-3 text-center">
+              <p className="text-xs text-orange-600 dark:text-orange-400 font-medium">A Receber</p>
+              <p className="text-lg font-bold text-orange-700 dark:text-orange-300">R$ {stats.totalReceber.toFixed(2).replace(".", ",")}</p>
             </div>
           </div>
 
