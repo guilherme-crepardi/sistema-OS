@@ -76,12 +76,19 @@ export default function IPTVClientesPage() {
     if (!confirm("Marcar este cliente como pago?")) return;
 
     try {
+      const cliente = clientes.find((c) => c.id === id);
+      if (!cliente) return;
+
+      const proximoVencimento = new Date(cliente.data_vencimento);
+      proximoVencimento.setMonth(proximoVencimento.getMonth() + 1);
+
       const { error } = await supabase
         .from("iptv_clientes")
         .update({
           status: "ativo",
           pagou: true,
           notificado: false,
+          data_vencimento: proximoVencimento.toISOString().split("T")[0],
           updated_at: new Date().toISOString(),
         })
         .eq("id", id);

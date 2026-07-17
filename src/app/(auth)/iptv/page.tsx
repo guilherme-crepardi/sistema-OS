@@ -40,9 +40,20 @@ export default function IPTVPage() {
 
   async function handleMarkAsPaid(id: string) {
     try {
+      const cliente = clientes.find((c) => c.id === id);
+      if (!cliente) return;
+
+      const proximoVencimento = new Date(cliente.data_vencimento);
+      proximoVencimento.setMonth(proximoVencimento.getMonth() + 1);
+
       await supabase
         .from("iptv_clientes")
-        .update({ pagou: true, notificado: false, updated_at: new Date().toISOString() })
+        .update({
+          pagou: true,
+          notificado: false,
+          data_vencimento: proximoVencimento.toISOString().split("T")[0],
+          updated_at: new Date().toISOString(),
+        })
         .eq("id", id);
       loadClientes();
     } catch (error) {
