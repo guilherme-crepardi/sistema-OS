@@ -6,6 +6,7 @@ import { supabase, ServicoExterno } from "@/lib/supabase";
 import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, MapPin, Repeat, DollarSign } from "lucide-react";
 
 type Filtro = "todos" | "externo" | "recorrente" | "pago" | "nao_pago";
+type Periodo = "diario" | "semanal" | "mensal" | "anual";
 
 const RECURRENCIA_LABELS: Record<string, string> = {
   semanal: "Semanal",
@@ -22,6 +23,7 @@ export default function ServicosExternosPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filtro, setFiltro] = useState<Filtro>("todos");
+  const [periodo, setPeriodo] = useState<Periodo>("mensal");
 
   useEffect(() => {
     loadServicos();
@@ -68,15 +70,37 @@ export default function ServicosExternosPage() {
   }
 
   const filtrados = servicos.filter((s) => {
+    const data = new Date(s.data_servico || s.created_at);
+    const now = new Date();
+    const inicio = new Date(now);
+
+    switch (periodo) {
+      case "diario":
+        inicio.setHours(0, 0, 0, 0);
+        break;
+      case "semanal":
+        inicio.setDate(now.getDate() - 7);
+        break;
+      case "mensal":
+        inicio.setMonth(now.getMonth() - 1);
+        break;
+      case "anual":
+        inicio.setFullYear(now.getFullYear() - 1);
+        break;
+    }
+
+    if (data < inicio) return false;
+
     if (!search) return true;
     return s.cliente_nome.toLowerCase().includes(search.toLowerCase());
   });
 
-  const total = servicos.length;
-  const totalExternos = servicos.filter((s) => s.tipo === "externo").length;
-  const totalRecorrentes = servicos.filter((s) => s.tipo === "recorrente").length;
-  const totalPago = servicos.filter((s) => s.pago).reduce((acc, s) => acc + s.valor, 0);
-  const totalNaoPago = servicos.filter((s) => !s.pago).reduce((acc, s) => acc + s.valor, 0);
+  const statsFiltrados = filtrados;
+  const total = statsFiltrados.length;
+  const totalExternos = statsFiltrados.filter((s) => s.tipo === "externo").length;
+  const totalRecorrentes = statsFiltrados.filter((s) => s.tipo === "recorrente").length;
+  const totalPago = statsFiltrados.filter((s) => s.pago).reduce((acc, s) => acc + s.valor, 0);
+  const totalNaoPago = statsFiltrados.filter((s) => !s.pago).reduce((acc, s) => acc + s.valor, 0);
 
   return (
     <div className="space-y-6">
@@ -157,6 +181,28 @@ export default function ServicosExternosPage() {
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm p-4">
         <div className="flex flex-col gap-4">
+          {/* Periodo */}
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {([
+              { value: "diario" as Periodo, label: "Diário" },
+              { value: "semanal" as Periodo, label: "Semanal" },
+              { value: "mensal" as Periodo, label: "Mensal" },
+              { value: "anual" as Periodo, label: "Anual" },
+            ]).map((p) => (
+              <button
+                key={p.value}
+                onClick={() => setPeriodo(p.value)}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
+                  periodo === p.value
+                    ? "bg-[#2563eb] text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
           {/* Tabs */}
           <div className="flex gap-2 overflow-x-auto pb-1">
             {([
