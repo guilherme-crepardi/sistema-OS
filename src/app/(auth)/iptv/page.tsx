@@ -3,12 +3,20 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase, IptvCliente } from "@/lib/supabase";
-import { Plus, Tv, AlertTriangle, CheckCircle, XCircle, Send, Clock } from "lucide-react";
+import { Plus, Tv, AlertTriangle, CheckCircle, XCircle, Send, Clock, DollarSign, Search } from "lucide-react";
+
+type FiltroPagamento = "todos" | "pago" | "pendente";
 
 export default function IPTVPage() {
   const [clientes, setClientes] = useState<IptvCliente[]>([]);
   const [loading, setLoading] = useState(true);
   const [sendingReminders, setSendingReminders] = useState(false);
+  const [filtroPagamento, setFiltroPagamento] = useState<FiltroPagamento>("todos");
+  const [mesSelecionado, setMesSelecionado] = useState(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  });
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     loadClientes();
@@ -30,8 +38,49 @@ export default function IPTVPage() {
     }
   }
 
+  async function handleMarkAsPaid(id: string) {
+    try {
+      await supabase
+        .from("iptv_clientes")
+        .update({ pagou: true, notificado: false, updated_at: new Date().toISOString() })
+        .eq("id", id);
+      loadClientes();
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+    }
+  }
+
+  async function handleMarkAsUnpaid(id: string) {
+    try {
+      await supabase
+        .from("iptv_clientes")
+        .update({ pagou: false, updated_at: new Date().toISOString() })
+        .eq("id", id);
+      loadClientes();
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+    }
+  }
+
   const today = new Date();
   const threeDaysFromNow = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+  const [anoFiltro, mesFiltro] = mesSelecionado.split("-").map(Number);
+
+  const clientesMes = clientes.filter((c) => {
+    const venc = new Date(c.data_vencimento);
+    return venc.getFullYear() === anoFiltro && venc.getMonth() + 1 === mesFiltro;
+  });
+
+  const clientesFiltrados = clientesMes.filter((c) => {
+    if (filtroPagamento === "pago" && !c.pagou) return false;
+    if (filtroPagamento === "pendente" && c.pagou) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      if (!c.nome.toLowerCase().includes(s) && !c.telefone.includes(s)) return false;
+    }
+    return true;
+  });
 
   const stats = {
     total: clientes.length,
@@ -44,8 +93,10 @@ export default function IPTVPage() {
         new Date(c.data_vencimento) <= threeDaysFromNow &&
         new Date(c.data_vencimento) >= today
     ).length,
-    pendentes: clientes.filter((c) => !c.pagou).length,
-    totalReceber: clientes.filter((c) => !c.pagou).reduce((acc, c) => acc + c.valor, 0),
+    pendentes: clientesMes.filter((c) => !c.pagou).length,
+    pagos: clientesMes.filter((c) => c.pagou).length,
+    totalReceber: clientesMes.filter((c) => !c.pagou).reduce((acc, c) => acc + c.valor, 0),
+    totalPago: clientesMes.filter((c) => c.pagou).reduce((acc, c) => acc + c.valor, 0),
   };
 
   const vencendoList = clientes.filter(
@@ -54,6 +105,13 @@ export default function IPTVPage() {
       new Date(c.data_vencimento) <= threeDaysFromNow &&
       new Date(c.data_vencimento) >= today
   );
+
+  const mesesDisponiveis = new Set<string>();
+  clientes.forEach((c) => {
+    const d = new Date(c.data_vencimento);
+    mesesDisponiveis.add(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+  });
+  const mesesOrdenados = Array.from(mesesDisponiveis).sort().reverse();
 
   async function handleSendReminders() {
     if (!confirm(`Enviar lembrete para ${vencendoList.length} cliente(s) que estão com plano vencendo?`)) {
@@ -113,44 +171,14 @@ export default function IPTVPage() {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats Gerais */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-        <StatCard
-          title="Total"
-          value={stats.total}
-          icon={Tv}
-          color="bg-[#2563eb]"
-        />
-        <StatCard
-          title="Ativos"
-          value={stats.ativos}
-          icon={CheckCircle}
-          color="bg-green-500"
-        />
-        <StatCard
-          title="Pendentes"
-          value={stats.pendentes}
-          icon={Clock}
-          color="bg-yellow-500"
-        />
-        <StatCard
-          title="Vencidos"
-          value={stats.vencidos}
-          icon={XCircle}
-          color="bg-red-500"
-        />
-        <StatCard
-          title="Cancelados"
-          value={stats.cancelados}
-          icon={XCircle}
-          color="bg-gray-500"
-        />
-        <StatCard
-          title="A Receber"
-          value={`R$ ${stats.totalReceber.toFixed(2).replace(".", ",")}`}
-          icon={AlertTriangle}
-          color="bg-orange-500"
-        />
+        <StatCard title="Total" value={stats.total} icon={Tv} color="bg-[#2563eb]" />
+        <StatCard title="Ativos" value={stats.ativos} icon={CheckCircle} color="bg-green-500" />
+        <StatCard title="Pendentes" value={stats.pendentes} icon={Clock} color="bg-yellow-500" />
+        <StatCard title="Vencidos" value={stats.vencidos} icon={XCircle} color="bg-red-500" />
+        <StatCard title="Cancelados" value={stats.cancelados} icon={XCircle} color="bg-gray-500" />
+        <StatCard title="Vencendo (3 dias)" value={stats.vencendo} icon={AlertTriangle} color="bg-orange-500" />
       </div>
 
       {/* Lista de clientes vencendo */}
@@ -166,21 +194,14 @@ export default function IPTVPage() {
                 (new Date(cliente.data_vencimento).getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
               );
               return (
-                <div
-                  key={cliente.id}
-                  className="flex items-center justify-between bg-white rounded-lg p-3"
-                >
+                <div key={cliente.id} className="flex items-center justify-between bg-white rounded-lg p-3">
                   <div>
                     <p className="font-medium">{cliente.nome}</p>
                     <p className="text-sm text-gray-500">{cliente.telefone}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium text-yellow-700">
-                      Vence em {diasRestantes} dia(s)
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}
-                    </p>
+                    <p className="text-sm font-medium text-yellow-700">Vence em {diasRestantes} dia(s)</p>
+                    <p className="text-xs text-gray-500">{new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}</p>
                   </div>
                 </div>
               );
@@ -188,6 +209,169 @@ export default function IPTVPage() {
           </div>
         </div>
       )}
+
+      {/* Seção de Pagamento por Mês */}
+      <div className="bg-white rounded-xl shadow-sm p-4">
+        <div className="flex flex-col gap-4">
+          {/* Filtros */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* Seleção de Mês */}
+            <select
+              value={mesSelecionado}
+              onChange={(e) => setMesSelecionado(e.target.value)}
+              className="px-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+            >
+              {mesesOrdenados.map((m) => {
+                const [a, mes] = m.split("-");
+                const nomeMes = new Date(Number(a), Number(mes) - 1).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+                return <option key={m} value={m}>{nomeMes}</option>;
+              })}
+            </select>
+
+            {/* Tabs Pagamento */}
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {([
+                { value: "todos" as FiltroPagamento, label: "Todos", color: "bg-[#2563eb]" },
+                { value: "pago" as FiltroPagamento, label: "Pagos", color: "bg-green-600" },
+                { value: "pendente" as FiltroPagamento, label: "Pendentes", color: "bg-yellow-500" },
+              ]).map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => setFiltroPagamento(tab.value)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+                    filtroPagamento === tab.value
+                      ? `${tab.color} text-white`
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Busca */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Buscar..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Resumo do Mês */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="bg-green-50 rounded-lg p-3 text-center">
+              <p className="text-xs text-green-600 font-medium">Pagos</p>
+              <p className="text-lg font-bold text-green-700">{stats.pagos}</p>
+              <p className="text-xs text-green-500">R$ {stats.totalPago.toFixed(2).replace(".", ",")}</p>
+            </div>
+            <div className="bg-yellow-50 rounded-lg p-3 text-center">
+              <p className="text-xs text-yellow-600 font-medium">Pendentes</p>
+              <p className="text-lg font-bold text-yellow-700">{stats.pendentes}</p>
+              <p className="text-xs text-yellow-500">R$ {stats.totalReceber.toFixed(2).replace(".", ",")}</p>
+            </div>
+            <div className="bg-blue-50 rounded-lg p-3 text-center">
+              <p className="text-xs text-blue-600 font-medium">Total no Mês</p>
+              <p className="text-lg font-bold text-blue-700">{clientesMes.length}</p>
+            </div>
+            <div className="bg-orange-50 rounded-lg p-3 text-center">
+              <p className="text-xs text-orange-600 font-medium">A Receber</p>
+              <p className="text-lg font-bold text-orange-700">R$ {stats.totalReceber.toFixed(2).replace(".", ",")}</p>
+            </div>
+          </div>
+
+          {/* Tabela */}
+          <div className="overflow-x-auto">
+            {clientesFiltrados.length === 0 ? (
+              <div className="text-center py-8">
+                <Tv className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500">Nenhum cliente encontrado</p>
+              </div>
+            ) : (
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">Telefone</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vencimento</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {clientesFiltrados.map((cliente) => {
+                    const isVencido = new Date(cliente.data_vencimento) < new Date();
+                    return (
+                      <tr key={cliente.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-[#2563eb] rounded-full flex items-center justify-center text-white text-sm font-medium">
+                              {cliente.nome.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-800 text-sm">{cliente.nome}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-600 hidden sm:table-cell">{cliente.telefone}</td>
+                        <td className="px-4 py-3">
+                          <p className={`text-sm ${isVencido ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                            {new Date(cliente.data_vencimento).toLocaleDateString("pt-BR")}
+                          </p>
+                        </td>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-800">
+                          R$ {cliente.valor.toFixed(2).replace(".", ",")}
+                        </td>
+                        <td className="px-4 py-3">
+                          {cliente.pagou ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                              <CheckCircle size={12} /> Pago
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                              <Clock size={12} /> Pendente
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {!cliente.pagou ? (
+                              <button
+                                onClick={() => handleMarkAsPaid(cliente.id)}
+                                className="px-3 py-1 text-xs font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 transition-colors"
+                              >
+                                Confirmar Pagamento
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => handleMarkAsUnpaid(cliente.id)}
+                                className="px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                              >
+                                Desfazer
+                              </button>
+                            )}
+                            <Link
+                              href={`/iptv/clientes/${cliente.id}`}
+                              className="px-3 py-1 text-xs font-medium text-[#2563eb] bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                            >
+                              Editar
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Link para lista completa */}
       <Link
