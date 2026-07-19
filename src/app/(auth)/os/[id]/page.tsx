@@ -242,74 +242,74 @@ export default function DetalheOSPage() {
       {/* Print Layout */}
       <div ref={printRef}>
         {/* ==================== VIA DA LOJA ==================== */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden mb-6 print:shadow-none print:rounded-none">
-          <div className="bg-[#1e3a8a] text-white p-4 text-center">
-            <h1 className="text-xl font-bold">MASTERTECH ELETRÔNICA</h1>
-            <p className="text-blue-200 text-sm">Central de Serviços</p>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden mb-4 print:shadow-none print:rounded-none">
+          <div className="bg-[#1e3a8a] text-white p-3 text-center">
+            <h1 className="text-lg font-bold">MASTERTECH ELETRÔNICA</h1>
+            <p className="text-blue-200 text-xs">Central de Serviços</p>
           </div>
-          <div className="p-4 sm:p-6">
-            <div className="text-center mb-4 pb-3 border-b-2 border-gray-200">
-              <p className="text-xs text-gray-400 uppercase font-medium tracking-wider">Via da Loja</p>
-              <p className="text-sm text-gray-500">ORDEM DE SERVIÇO</p>
-              <p className="text-2xl font-bold text-[#1e3a8a]">Nº {os.numero}</p>
+          <div className="p-3 sm:p-4">
+            <div className="text-center mb-3 pb-2 border-b-2 border-gray-200">
+              <p className="text-[10px] text-gray-400 uppercase font-medium tracking-wider">Via da Loja</p>
+              <p className="text-xs text-gray-500">ORDEM DE SERVIÇO</p>
+              <p className="text-xl font-bold text-[#1e3a8a]">Nº {os.numero}</p>
             </div>
 
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
               <div className="flex items-center gap-2">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusConfig.color}`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusConfig.color}`}>
                   {statusConfig.label}
                 </span>
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${os.pago ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${os.pago ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                   {os.pago ? "Pago" : "Não Pago"}
                 </span>
               </div>
-              <p className="text-xs text-gray-400">{new Date(os.created_at).toLocaleDateString("pt-BR")}</p>
+              <p className="text-[10px] text-gray-400">{new Date(os.created_at).toLocaleDateString("pt-BR")}</p>
             </div>
 
-            <div className="mb-4">
-              <h3 className="text-xs font-semibold text-gray-400 uppercase mb-2">Dados do Cliente</h3>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="mb-3">
+              <h3 className="text-[10px] font-semibold text-gray-400 uppercase mb-1">Dados do Cliente</h3>
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <p className="text-xs text-gray-400">Nome</p>
-                  <p className="font-medium text-sm">{os.cliente?.nome || "—"}</p>
+                  <p className="text-[10px] text-gray-400">Nome</p>
+                  <p className="font-medium text-xs">{os.cliente?.nome || "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400">Telefone</p>
-                  <p className="font-medium text-sm">{os.cliente?.telefone || "—"}</p>
+                  <p className="text-[10px] text-gray-400">Telefone</p>
+                  <p className="font-medium text-xs">{os.cliente?.telefone || "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400">CPF</p>
-                  <p className="font-medium text-sm">{os.cliente?.cpf || "—"}</p>
+                  <p className="text-[10px] text-gray-400">CPF</p>
+                  <p className="font-medium text-xs">{os.cliente?.cpf || "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400">Email</p>
-                  <p className="font-medium text-sm">{os.cliente?.email || "—"}</p>
+                  <p className="text-[10px] text-gray-400">Email</p>
+                  <p className="font-medium text-xs">{os.cliente?.email || "—"}</p>
                 </div>
               </div>
             </div>
 
-            <div className="mb-4">
-              <h3 className="text-xs font-semibold text-gray-400 uppercase mb-2">Serviço</h3>
-              <div className="space-y-2">
+            <div className="mb-3">
+              <h3 className="text-[10px] font-semibold text-gray-400 uppercase mb-1">Serviço</h3>
+              <div className="space-y-1">
                 {os.equipamento && (
                   <div>
-                    <p className="text-xs text-gray-400">Equipamento</p>
-                    <p className="font-medium text-sm">{os.equipamento}</p>
+                    <p className="text-[10px] text-gray-400">Equipamento</p>
+                    <p className="font-medium text-xs">{os.equipamento}</p>
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-gray-400">Serviço Realizado</p>
-                  <p className="font-medium text-sm">{os.descricao || "—"}</p>
+                  <p className="text-[10px] text-gray-400">Serviço Realizado</p>
+                  <p className="font-medium text-xs">{os.descricao || "—"}</p>
                 </div>
                 {os.problema && (
                   <div>
-                    <p className="text-xs text-gray-400">Problema Relatado</p>
-                    <p className="font-medium text-sm">{os.problema}</p>
+                    <p className="text-[10px] text-gray-400">Problema Relatado</p>
+                    <p className="font-medium text-xs">{os.problema}</p>
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-gray-400">Valor</p>
-                  <p className="text-xl font-bold text-[#1e3a8a]">
+                  <p className="text-[10px] text-gray-400">Valor</p>
+                  <p className="text-lg font-bold text-[#1e3a8a]">
                     R$ {os.valor.toFixed(2).replace(".", ",")}
                   </p>
                 </div>
@@ -317,21 +317,21 @@ export default function DetalheOSPage() {
             </div>
 
             {os.observacoes && (
-              <div className="mb-4">
-                <h3 className="text-xs font-semibold text-gray-400 uppercase mb-1">Observações</h3>
-                <p className="text-sm text-gray-600">{os.observacoes}</p>
+              <div className="mb-3">
+                <h3 className="text-[10px] font-semibold text-gray-400 uppercase mb-1">Observações</h3>
+                <p className="text-xs text-gray-600">{os.observacoes}</p>
               </div>
             )}
 
-            <div className="pt-6 border-t border-gray-200">
-              <div className="flex justify-between gap-8">
+            <div className="pt-4 border-t border-gray-200">
+              <div className="flex justify-between gap-6">
                 <div className="text-center flex-1">
-                  <div className="border-b border-gray-400 mb-2 mx-auto w-40"></div>
-                  <p className="text-xs text-gray-400">Assinatura do Cliente</p>
+                  <div className="border-b border-gray-400 mb-1 mx-auto w-36"></div>
+                  <p className="text-[10px] text-gray-400">Assinatura do Cliente</p>
                 </div>
                 <div className="text-center flex-1">
-                  <div className="border-b border-gray-400 mb-2 mx-auto w-40"></div>
-                  <p className="text-xs text-gray-400">Responsável Técnico</p>
+                  <div className="border-b border-gray-400 mb-1 mx-auto w-36"></div>
+                  <p className="text-[10px] text-gray-400">Responsável Técnico</p>
                 </div>
               </div>
             </div>
@@ -339,42 +339,42 @@ export default function DetalheOSPage() {
         </div>
 
         {/* ==================== VIA DO CLIENTE ==================== */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden print:shadow-none print:rounded-none print-page-break">
-          <div className="bg-[#1e3a8a] text-white p-4 text-center">
-            <h1 className="text-xl font-bold">MASTERTECH ELETRÔNICA</h1>
-            <p className="text-blue-200 text-sm">Central de Serviços</p>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden mt-2 print:shadow-none print:rounded-none">
+          <div className="bg-[#1e3a8a] text-white p-2 text-center">
+            <h1 className="text-lg font-bold">MASTERTECH ELETRÔNICA</h1>
+            <p className="text-blue-200 text-xs">Central de Serviços</p>
           </div>
-          <div className="p-4 sm:p-6">
-            <div className="text-center mb-4 pb-3 border-b-2 border-gray-200">
-              <p className="text-xs text-gray-400 uppercase font-medium tracking-wider">Via do Cliente</p>
-              <p className="text-sm text-gray-500">ORDEM DE SERVIÇO</p>
-              <p className="text-2xl font-bold text-[#1e3a8a]">Nº {os.numero}</p>
+          <div className="p-3 sm:p-4">
+            <div className="text-center mb-3 pb-2 border-b-2 border-gray-200">
+              <p className="text-[10px] text-gray-400 uppercase font-medium tracking-wider">Via do Cliente</p>
+              <p className="text-xs text-gray-500">ORDEM DE SERVIÇO</p>
+              <p className="text-xl font-bold text-[#1e3a8a]">Nº {os.numero}</p>
             </div>
 
-            <div className="space-y-3 mb-6">
+            <div className="space-y-2 mb-4">
               <div>
-                <p className="text-xs text-gray-400">Cliente</p>
-                <p className="font-medium">{os.cliente?.nome || "—"}</p>
+                <p className="text-[10px] text-gray-400">Cliente</p>
+                <p className="font-medium text-xs">{os.cliente?.nome || "—"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-400">Telefone</p>
-                <p className="font-medium">{os.cliente?.telefone || "—"}</p>
+                <p className="text-[10px] text-gray-400">Telefone</p>
+                <p className="font-medium text-xs">{os.cliente?.telefone || "—"}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-400">Endereço</p>
-                <p className="font-medium">{os.cliente?.endereco || "—"}</p>
+                <p className="text-[10px] text-gray-400">Endereço</p>
+                <p className="font-medium text-xs">{os.cliente?.endereco || "—"}</p>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-gray-200">
-              <div className="flex justify-between gap-8">
+            <div className="pt-4 border-t border-gray-200">
+              <div className="flex justify-between gap-6">
                 <div className="text-center flex-1">
-                  <div className="border-b border-gray-400 mb-2 mx-auto w-40"></div>
-                  <p className="text-xs text-gray-400">Assinatura do Cliente</p>
+                  <div className="border-b border-gray-400 mb-1 mx-auto w-36"></div>
+                  <p className="text-[10px] text-gray-400">Assinatura do Cliente</p>
                 </div>
                 <div className="text-center flex-1">
-                  <div className="border-b border-gray-400 mb-2 mx-auto w-40"></div>
-                  <p className="text-xs text-gray-400">Responsável Técnico</p>
+                  <div className="border-b border-gray-400 mb-1 mx-auto w-36"></div>
+                  <p className="text-[10px] text-gray-400">Responsável Técnico</p>
                 </div>
               </div>
             </div>

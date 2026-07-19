@@ -75,6 +75,10 @@ html.dark body {
     page-break-before: always;
     break-before: page;
   }
+
+  @page {
+    margin: 10mm;
+  }
 }
 
 .print-only {
