@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
-import { supabase, OrdemServico, IptvCliente, Cliente, ServicoExterno } from "@/lib/supabase";
+import { supabase, OrdemServico, IptvCliente, Cliente, ServicoExterno, getUserId } from "@/lib/supabase";
 import { DollarSign, TrendingUp, Clock, CheckCircle, Calendar, Filter } from "lucide-react";
 
 type Periodo = "diario" | "semanal" | "mensal" | "anual";
@@ -34,10 +34,12 @@ export default function FinanceiroPage() {
 
   async function loadData() {
     try {
+      const userId = await getUserId();
+      if (!userId) return;
       const [osData, iptvData, servicosData] = await Promise.all([
-        supabase.from("ordens_servico").select("*, cliente:clientes(*)").order("created_at", { ascending: false }),
-        supabase.from("iptv_clientes").select("*").order("created_at", { ascending: false }),
-        supabase.from("servicos_externos").select("*").order("created_at", { ascending: false }),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("user_id", userId).order("created_at", { ascending: false }),
+        supabase.from("iptv_clientes").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+        supabase.from("servicos_externos").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
       ]);
       setOrdens(osData.data || []);
       setIptvClientes(iptvData.data || []);

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase, Cliente } from "@/lib/supabase";
+import { supabase, Cliente, getUserId } from "@/lib/supabase";
 import { ArrowLeft, Save, Plus, X } from "lucide-react";
 import Link from "next/link";
 
@@ -57,16 +57,21 @@ export default function NovaOSPage() {
   }, []);
 
   async function loadClientes() {
-    const { data } = await supabase.from("clientes").select("*").order("nome");
+    const userId = await getUserId();
+    if (!userId) return;
+    const { data } = await supabase.from("clientes").select("*").eq("user_id", userId).order("nome");
     setClientes(data || []);
   }
 
   const handleCriarCliente = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const userId = await getUserId();
+      if (!userId) throw new Error("Usuário não autenticado");
       const { data, error } = await supabase
         .from("clientes")
         .insert({
+          user_id: userId,
           nome: novoCliente.nome,
           telefone: novoCliente.telefone,
           cpf: novoCliente.cpf || null,
@@ -96,7 +101,10 @@ export default function NovaOSPage() {
     setLoading(true);
 
     try {
+      const userId = await getUserId();
+      if (!userId) throw new Error("Usuário não autenticado");
       const { error } = await supabase.from("ordens_servico").insert({
+        user_id: userId,
         cliente_id: form.cliente_id || null,
         equipamento: form.equipamento || null,
         descricao: form.descricao || null,

@@ -23,8 +23,14 @@ export const supabase = new Proxy({} as any, {
   },
 });
 
+export async function getUserId(): Promise<string | null> {
+  const { data } = await getSupabase().auth.getSession();
+  return data.session?.user?.id ?? null;
+}
+
 export interface Cliente {
   id: string;
+  user_id: string;
   nome: string;
   cpf: string | null;
   rg: string | null;
@@ -37,13 +43,14 @@ export interface Cliente {
 
 export interface OrdemServico {
   id: string;
+  user_id: string;
   numero: number;
   cliente_id: string | null;
   equipamento: string | null;
   descricao: string;
   problema: string | null;
   valor: number;
-  status: 'aberta' | 'em_andamento' | 'aguardando_peca' | 'pronta';
+  status: 'aberta' | 'em_andamento' | 'aguardando_peca' | 'pronta' | 'entregue';
   pago: boolean;
   observacoes: string | null;
   created_at: string;
@@ -53,6 +60,7 @@ export interface OrdemServico {
 
 export interface IptvCliente {
   id: string;
+  user_id: string;
   nome: string;
   telefone: string;
   email: string | null;
@@ -68,6 +76,7 @@ export interface IptvCliente {
 
 export interface ServicoExterno {
   id: string;
+  user_id: string;
   cliente_nome: string;
   telefone: string | null;
   servico: string;

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase, IptvCliente } from "@/lib/supabase";
+import { supabase, IptvCliente, getUserId } from "@/lib/supabase";
 import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, Clock, DollarSign, AlertTriangle, ArrowLeft } from "lucide-react";
 
 const STATUS_CONFIG = {
@@ -32,9 +32,12 @@ export default function IPTVClientesPage() {
     if (lastReset === currentMonth) return;
 
     try {
+      const userId = await getUserId();
+      if (!userId) return;
       await supabase
         .from("iptv_clientes")
         .update({ pagou: false, notificado: false, updated_at: new Date().toISOString() })
+        .eq("user_id", userId)
         .eq("pagou", true);
 
       localStorage.setItem("iptv_last_reset_month", currentMonth);
@@ -46,7 +49,9 @@ export default function IPTVClientesPage() {
 
   async function loadClientes() {
     try {
-      let query = supabase.from("iptv_clientes").select("*").order("nome");
+      const userId = await getUserId();
+      if (!userId) return;
+      let query = supabase.from("iptv_clientes").select("*").eq("user_id", userId).order("nome");
 
       if (statusFilter) {
         query = query.eq("status", statusFilter);

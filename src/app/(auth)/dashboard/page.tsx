@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, getUserId } from "@/lib/supabase";
 import { Users, Settings, Tv, AlertTriangle, Clock, CheckCircle, XCircle, Wrench } from "lucide-react";
 import Link from "next/link";
 import { OrdemServico, Cliente } from "@/lib/supabase";
@@ -41,13 +41,15 @@ export default function DashboardPage() {
 
   async function loadStats() {
     try {
+      const userId = await getUserId();
+      if (!userId) return;
       const [clientes, os, iptv, osAndamento, osPronta, osEntregue] = await Promise.all([
-        supabase.from("clientes").select("id", { count: "exact", head: true }),
-        supabase.from("ordens_servico").select("status"),
-        supabase.from("iptv_clientes").select("status, data_vencimento"),
-        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("status", "em_andamento").order("created_at", { ascending: false }),
-        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("status", "pronta").order("created_at", { ascending: false }),
-        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("status", "entregue").order("created_at", { ascending: false }).limit(10),
+        supabase.from("clientes").select("id", { count: "exact", head: true }).eq("user_id", userId),
+        supabase.from("ordens_servico").select("status").eq("user_id", userId),
+        supabase.from("iptv_clientes").select("status, data_vencimento").eq("user_id", userId),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("user_id", userId).eq("status", "em_andamento").order("created_at", { ascending: false }),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("user_id", userId).eq("status", "pronta").order("created_at", { ascending: false }),
+        supabase.from("ordens_servico").select("*, cliente:clientes(*)").eq("user_id", userId).eq("status", "entregue").order("created_at", { ascending: false }).limit(10),
       ]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

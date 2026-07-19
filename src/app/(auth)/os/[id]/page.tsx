@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabase, OrdemServico, Cliente } from "@/lib/supabase";
+import { supabase, OrdemServico, Cliente, getUserId } from "@/lib/supabase";
 import { ArrowLeft, Save, Printer, Edit, X, Trash2, DollarSign } from "lucide-react";
 import Link from "next/link";
 
@@ -41,7 +41,9 @@ export default function DetalheOSPage() {
   }, [id]);
 
   async function loadClientes() {
-    const { data } = await supabase.from("clientes").select("*").order("nome");
+    const userId = await getUserId();
+    if (!userId) return;
+    const { data } = await supabase.from("clientes").select("*").eq("user_id", userId).order("nome");
     setClientes(data || []);
   }
 

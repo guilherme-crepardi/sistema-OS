@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { supabase, getUserId } from "@/lib/supabase";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 
@@ -25,7 +25,10 @@ export default function NovoServicoExternoPage() {
     setLoading(true);
 
     try {
+      const userId = await getUserId();
+      if (!userId) throw new Error("Usuário não autenticado");
       const { error } = await supabase.from("servicos_externos").insert({
+        user_id: userId,
         cliente_nome: form.cliente_nome,
         telefone: form.telefone || null,
         tipo: form.tipo,

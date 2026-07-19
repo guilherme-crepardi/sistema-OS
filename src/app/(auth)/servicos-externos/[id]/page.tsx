@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { supabase, ServicoExterno } from "@/lib/supabase";
+import { supabase, ServicoExterno, getUserId } from "@/lib/supabase";
 import { ArrowLeft, Save, Trash2, DollarSign } from "lucide-react";
 import Link from "next/link";
 

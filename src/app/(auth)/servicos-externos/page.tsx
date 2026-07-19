@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase, ServicoExterno } from "@/lib/supabase";
+import { supabase, ServicoExterno, getUserId } from "@/lib/supabase";
 import { Plus, Search, Edit, Trash2, CheckCircle, XCircle, MapPin, Repeat, DollarSign, Calendar } from "lucide-react";
 
 type Filtro = "todos" | "externo" | "recorrente" | "pago" | "nao_pago";
@@ -33,9 +33,12 @@ export default function ServicosExternosPage() {
 
   async function loadServicos() {
     try {
+      const userId = await getUserId();
+      if (!userId) return;
       let query = supabase
         .from("servicos_externos")
         .select("*")
+        .eq("user_id", userId)
         .order("data_servico", { ascending: false });
 
       if (filtro === "externo") {

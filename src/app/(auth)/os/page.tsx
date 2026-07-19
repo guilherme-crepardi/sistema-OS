@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase, OrdemServico, Cliente } from "@/lib/supabase";
+import { supabase, OrdemServico, Cliente, getUserId } from "@/lib/supabase";
 import { Plus, Search, Eye, Printer, Clock, CheckCircle, AlertCircle, Settings, Trash2 } from "lucide-react";
 
 const STATUS_CONFIG = {
@@ -28,9 +28,12 @@ export default function OSPage() {
 
   async function loadOrdens() {
     try {
+      const userId = await getUserId();
+      if (!userId) return;
       let query = supabase
         .from("ordens_servico")
         .select("*, cliente:clientes(*)")
+        .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
       if (statusFilter) {

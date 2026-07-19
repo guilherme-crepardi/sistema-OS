@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase, IptvCliente } from "@/lib/supabase";
+import { supabase, IptvCliente, getUserId } from "@/lib/supabase";
 import { Plus, Tv, AlertTriangle, CheckCircle, XCircle, Send, Clock, DollarSign, Search } from "lucide-react";
 
 type FiltroPagamento = "todos" | "pago" | "pendente";
@@ -37,9 +37,12 @@ export default function IPTVPage() {
 
   async function loadClientes() {
     try {
+      const userId = await getUserId();
+      if (!userId) return;
       const { data, error } = await supabase
         .from("iptv_clientes")
         .select("*")
+        .eq("user_id", userId)
         .order("data_vencimento");
 
       if (error) throw error;

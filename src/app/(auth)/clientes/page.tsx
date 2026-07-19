@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase, Cliente } from "@/lib/supabase";
+import { supabase, Cliente, getUserId } from "@/lib/supabase";
 import { Plus, Search, Edit, Trash2, Eye, Phone, Mail } from "lucide-react";
 
 export default function ClientesPage() {
@@ -16,7 +16,9 @@ export default function ClientesPage() {
 
   async function loadClientes() {
     try {
-      let query = supabase.from("clientes").select("*").order("nome");
+      const userId = await getUserId();
+      if (!userId) return;
+      let query = supabase.from("clientes").select("*").eq("user_id", userId).order("nome");
 
       if (search) {
         query = query.or(`nome.ilike.%${search}%,cpf.ilike.%${search}%`);
